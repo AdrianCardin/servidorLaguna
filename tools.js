@@ -28,10 +28,12 @@ function abrirPaginaBloqueada(src) {
   );
 }
 function sendToHija() {
-  ventanaHija.document.getElementById("mensajeRecibidoPadre").value = document.getElementById("mensajeEnviadoPadre").value;
+  ventanaHija.document.getElementById("mensajeRecibidoPadre").value =
+    document.getElementById("mensajeEnviadoPadre").value;
 }
 function sendToPadre() {
-  opener.document.getElementById("mensajeRecibidoHija").value = document.getElementById("mensajeEnviadoHija").value;
+  opener.document.getElementById("mensajeRecibidoHija").value =
+    document.getElementById("mensajeEnviadoHija").value;
 }
 function haciaDelante() {
   window.history.forward();

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../tools.js"></script>
+    <title>Ejercicio 4</title>
+</head>
+<body>
+    <button type="button" onclick="abrirPaginaBloqueada('./hija.html')" >Abrir</button>
+
+    <form>
+        <p>Escribe aqui un mensaje para enviar</p>
+        <input id="mensajeEnviadoPadre" type="text" />
+        <p>Aqui se recibe el mensaje</p>
+        <input id="mensajeRecibidoHija" type="text" />
+        <input type="button" onclick="sendToHija()" value="enviar" />
+      </form>
+    
+</body>
+</html>

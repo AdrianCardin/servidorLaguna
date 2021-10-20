@@ -1,0 +1,17 @@
+*{
+    top: 0;
+    left: 0;
+    
+    background-color: rgb(148, 148, 148);
+}
+.link{
+    position: relative;
+    transform: translate(0,20%);
+    text-align: center;
+    margin-left: 40%;
+    margin-right: 40%;
+    border: 2px solid black;
+    position: relative;
+}
+form{
+}

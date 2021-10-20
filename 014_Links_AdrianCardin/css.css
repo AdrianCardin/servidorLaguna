@@ -1,0 +1,19 @@
+*{
+    top: 0;
+    left: 0;
+    
+    background-color: rgb(148, 148, 148);
+}
+.formulario{
+    position: relative;
+    transform: translate(0,150%);
+    text-align: center;
+    margin-left: 40%;
+    margin-right: 40%;
+    z-index: 100;
+}
+form{
+    border: 2px solid black;
+    position: relative;
+    top: 50%;
+}

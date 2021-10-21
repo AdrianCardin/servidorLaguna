@@ -3,7 +3,7 @@
         if (isset($_COOKIE["cookie237"]) && !(isset($_REQUEST["reset"]))) {
 
             $acumulado = $_COOKIE["cookie237"];
-            isset($_POST["diferencia"]) ? $diferencia = $_REQUEST["diferencia"] : $diferencia = 1;
+            isset($_REQUEST["diferencia"]) ? $diferencia = $_REQUEST["diferencia"] : $diferencia = 1;
 
             if (isset($_REQUEST["resta"])) {
                 $acumulado = $acumulado - $diferencia;
@@ -13,7 +13,7 @@
         } else {
             // Si NO hay formulario enviado (1ª vez), o piden resetear.
             $acumulado = 0;
-            $diferencia = 1;
+            isset($_REQUEST["diferencia"]) ? $diferencia=$_REQUEST["diferencia"] : $diferencia = 1;
         }
         setcookie("cookie237", $acumulado, time() + 3600);
 ?>
@@ -35,9 +35,6 @@
     <input type='submit' value='Resetear' name='reset'>
 
     <br /><br />
-
-    <a href='<?= $_SERVER["PHP_SELF"] ?>'>Otra manera de resetear</a>
-    <br /><span>(Esta parece la mejor)</span>
 
 </form>
 

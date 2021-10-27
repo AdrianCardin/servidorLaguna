@@ -48,12 +48,12 @@
             <tr>
                 <td>Nombre</td>
             </tr>
-
+    
 
             <?php
             //nombres de la obtencion de bbdd
             foreach ($resultado as $fila) {
-                echo "<tr><td>" . $fila['nombre'] . "</td></tr>";
+                echo "<tr><td><a href='CategoriaFicha.php?id=17'>" . $fila['nombre'] . "</a></td></tr>";
             }
             ?>
 

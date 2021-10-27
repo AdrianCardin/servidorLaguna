@@ -4,11 +4,15 @@
     
     background-color: rgb(148, 148, 148);
 }
+a:link, a:visited, a:active {
+    text-decoration:none;
+    color: rgb(0, 53, 9);
+}
 table, th, td {
     border:1px solid black;
     margin: auto;
 }
-  .tabla{
+.tabla{
     border: 2px solid black;
     position: relative;
     transform: translate(0,0%);

@@ -51,9 +51,10 @@
     
 
             <?php
-            //nombres de la obtencion de bbdd
+            //nombres de la obtencion de bbdd con su id
+            $idAyuda="id";
             foreach ($resultado as $fila) {
-                echo "<tr><td><a href='CategoriaFicha.php?id=17'>" . $fila['nombre'] . "</a></td></tr>";
+                echo "<tr><td><a href='CategoriaFicha.php?id=$fila[$idAyuda]'>" . $fila['nombre'] . "</a></td></tr>";
             }
             ?>
 

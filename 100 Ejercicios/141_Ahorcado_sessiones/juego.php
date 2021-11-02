@@ -11,14 +11,27 @@
             $palabraSolucion=$_POST["palabraSolucion"];
             $letra=$_POST["letra"];
             $palabraEncriptada=encriptarPalabraCompleta($_POST["palabraSolucion"]);
-            $contador=0;
         }
+        
+        $contador=0;
     }elseif(isset($_POST["seguirJugando"])){
         //resto de pasadas
             $palabraSolucion=$_SESSION["palabraSolucion"];
             $letra=$_POST["letra"];
             $palabraEncriptada=$_SESSION["palabraEncriptada"];
+    }else{
+        $palabraSolucion=$_SESSION["palabraSolucion"];
+        $palabraEncriptada=$_SESSION["palabraEncriptada"];
+        $contador=$_SESSION["contador"];
     }
+
+
+    if (isset($_REQUEST["letra"])) {
+        $letra=$_REQUEST["letra"];
+    }else{
+        $letra=$_SESSION["letra"];
+    }
+
 
     // Si la palabra está contenida entra
     if (palabraContenida($palabraSolucion,$letra)) {
@@ -27,14 +40,18 @@
         $contador=$_SESSION["contador"];
     }else{ 
         //si fallas te cuenta el turno
-        if (isset($_SESSION["contador"])) {
+        if (isset($_SESSION["contador"]) && isset($_REQUEST["seguirJugando"]) ) {
             $contador=$_SESSION["contador"]+1;
         }else{
             $contador=0;
+            $palabraEncriptada=encriptarPalabraCompleta($_SESSION["palabraSolucion"]);
         }
     }
 
-
+    $_SESSION["letra"]=$letra;
+    $_SESSION["palabraSolucion"]=$palabraSolucion;
+    $_SESSION["palabraEncriptada"]=$palabraEncriptada;
+    $_SESSION["contador"]=$contador;
     
     // si se adivina terminas el juego
     if (adivinado($palabraSolucion,$palabraEncriptada)) {
@@ -46,9 +63,6 @@
     }
 
 
-    $_SESSION["palabraSolucion"]=$palabraSolucion;
-    $_SESSION["palabraEncriptada"]=$palabraEncriptada;
-    $_SESSION["contador"]=$contador;
 ?>
 
 
@@ -68,7 +82,7 @@
             <h2><?php echo $palabraEncriptada ?></h2>
             <h1>Letra</h1>
             <h2><?php echo $letra ?: "-"; ?></h2>
-            <h1>Numero de intentos</h1>
+            <h1>Numero de fallos</h1>
             <h2><?php echo $contador ?></h2>
             <h1>Escribe una letra</h1>
             <input type="text" name="letra"  size="20" autofocus>

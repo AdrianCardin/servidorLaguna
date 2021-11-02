@@ -44,7 +44,14 @@
             $contador=$_SESSION["contador"]+1;
         }else{
             $contador=0;
-            $palabraEncriptada=encriptarPalabraCompleta($_SESSION["palabraSolucion"]);
+            if (isset($_SESSION["palabraSolucion"])) {
+                //mientras estes en el juego y copias el link y lo pones en el navegador
+                $palabraEncriptada=encriptarPalabraCompleta($_SESSION["palabraSolucion"]);
+            }else{
+                //mientras estes en el juego y copias el link y lo pones en el navegador antes de hacer el primer try
+                $palabraEncriptada=encriptarPalabraCompleta($_POST["palabraSolucion"]);
+
+            }
         }
     }
 

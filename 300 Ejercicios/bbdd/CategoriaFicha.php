@@ -1,31 +1,13 @@
 <?php
-// hacemos la conexion
+require "../tools.php";
 
-    $servidor = "localhost";
-    $identificador = "root";
-    $contrasenna = "";
-    $bd = "agenda";
-
-    $opciones = [
-        PDO::ATTR_EMULATE_PREPARES   => false, // Modo emulación desactivado para prepared statements "reales"
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Que los errores salgan como excepciones
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // El modo de fetch que queremos por defecto.
-    ];
-
-    try {
-        $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8", $identificador, $contrasenna, $opciones);
-    } catch (Exception $e) {
-        error_log("Error al conectar: " . $e->getMessage());
-        exit('Error al conectar');
-    }
-
-
+$conexion=conectarABBDD();
 // tiene que recibir un id y lo ponemos en hidden
 
-$id=$_REQUEST["id"];
-    $sql = "SELECT * FROM Categoria where id=$id ORDER BY Nombre ";
+    $id=$_REQUEST["id"];
+    $sql = "SELECT * FROM Categoria WHERE id=? ORDER BY Nombre ";
     $select = $conexion->prepare($sql); // se prepara la sql
-    $select->execute([]);
+    $select->execute([$id]);
     $resultado = $select->fetchAll(); // obtiene los resultados
 
 ?>
@@ -43,6 +25,7 @@ $id=$_REQUEST["id"];
     <div class="contenedor">
         <h1>Estas en la Categoria Ficha</h1>
         <p>Estas en la categoria de : </p>
+        <input type="hidden" name="id" value=<?= $resultado[0]["id"] ?>>
         <input type="text" value=<?= $resultado[0]["nombre"] ?>>
     </div>
     

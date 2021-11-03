@@ -13,7 +13,7 @@ function conectarABBDD()
     ];
 
     try {
-        $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8", $identificador, $contrasenna, $opciones);
+       return $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8", $identificador, $contrasenna, $opciones);
     } catch (Exception $e) {
         error_log("Error al conectar: " . $e->getMessage());
         exit('Error al conectar');

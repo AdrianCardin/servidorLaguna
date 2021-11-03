@@ -35,10 +35,10 @@
 
 <body>
     <?php
-    $sql = "SELECT * FROM Categoria ORDER BY Nombre";
-    $select = $conexion->prepare($sql); // se prepara la sql
-    $select->execute([]);
-    $resultado = $select->fetchAll(); // obtiene los resultados
+        $sql = "SELECT * FROM Categoria ORDER BY Nombre";
+        $select = $conexion->prepare($sql); // se prepara la sql
+        $select->execute([]);
+        $resultado = $select->fetchAll(); // obtiene los resultados
 
     ?>
 

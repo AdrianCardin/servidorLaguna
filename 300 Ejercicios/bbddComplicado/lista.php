@@ -38,6 +38,7 @@
             }
             ?>
         </table>
-    
+</div>
+<a href="crear.php" class="link">Pincha para crear</a>
 </body>
 </html>

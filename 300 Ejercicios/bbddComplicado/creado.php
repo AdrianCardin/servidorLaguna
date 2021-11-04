@@ -18,9 +18,9 @@
 
 <body>
     <?php
-    $sql = "INSERT INTO Categoria VALUE nombre=?";
-    $select = $conexion->prepare($sql); // se prepara la sql
-    $select->execute([$nombre]);
+        $sql = "INSERT INTO categoria (nombre) VALUES (?)";
+        $select = $conexion->prepare($sql); // se prepara la sql
+        $select->execute([$nombre]);
 
     ?>
     <div class="actualizado">

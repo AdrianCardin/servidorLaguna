@@ -12,7 +12,7 @@
         <form action="creado.php" method="post">
             <h1>Estas en la Categoria Ficha</h1>
             <p>Estas en la categoria de : </p>
-            <input type="text" name="nombre">>
+            <input type="text" name="nombre">
             <input type="submit" value="Enviar">
         </form>
     </div>

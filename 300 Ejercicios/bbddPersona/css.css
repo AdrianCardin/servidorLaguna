@@ -1,0 +1,40 @@
+*{
+    top: 0;
+    left: 0;
+    
+    background-color: rgb(148, 148, 148);
+}
+a:link, a:visited, a:active {
+    text-decoration:none;
+    color: rgb(0, 53, 9);
+}
+table, th, td {
+    border:1px solid black;
+    margin: auto;
+}
+.tabla{
+    border: 2px solid black;
+    position: relative;
+    transform: translate(0,0%);
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.contenedor{
+    text-align: center;
+}
+.actualizado{
+    border: 1px solid rgb(3, 255, 3);
+    position: relative;
+    transform: translate(0,0%);
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+.link{
+    
+    position: relative;
+    text-align: center;  
+    margin-left: 47%;
+    margin-right: 20%;
+}

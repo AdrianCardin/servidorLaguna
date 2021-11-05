@@ -1,7 +1,6 @@
 <?php
-    require "../tools.php";
+require_once "../tools.php";
     $conexion=conectarABBDD();
-
 ?>
 
 
@@ -16,7 +15,7 @@
 </head>
 <body>
 <?php
-        $sql = "SELECT * FROM Categoria ORDER BY Nombre";
+        $sql = "SELECT p.id as IdPersona, p.nombre AS NombrePersona , c.nombre AS NombreCategoria FROM categoria AS c , persona AS p WHERE p.categoriaId = c.id ORDER BY NombrePersona";
         $select = $conexion->prepare($sql); // se prepara la sql
         $select->execute([]);
         $resultado = $select->fetchAll(); // obtiene los resultados
@@ -25,15 +24,17 @@
         <h1>Tabla resultado</h1>
         <table>
             <tr>
-                <td>Nombre</td>
+                <td>Nombre Persona</td>
+                <td>Nombre Categoria</td>
             </tr>
     
 
             <?php
             //nombres de la obtencion de bbdd con su id
-            $idAyuda="id";
+            $idAyuda="IdPersona";
             foreach ($resultado as $fila) {
-                echo "<tr><td><a href='ficha.php?id=$fila[$idAyuda]'>" . $fila['nombre'] . "</a></td>";
+                echo "<tr><td><a href='ficha.php?id=$fila[$idAyuda]'>" . $fila['NombrePersona'] . "</a></td>";
+                echo "<td><a href='ficha.php?id=$fila[$idAyuda]'>" . $fila['NombreCategoria'] . "</a></td>";
                 echo "<td><a href='eliminar.php?id=$fila[$idAyuda]'> X </a></td></tr>";
             }
             ?>

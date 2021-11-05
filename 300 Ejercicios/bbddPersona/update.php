@@ -3,6 +3,8 @@ require "../tools.php";
 
 $id=$_REQUEST["id"];// obtiene el id
 $nombre=$_REQUEST["nombre"];
+$apellidos=$_REQUEST["apellidos"];
+$telefono=$_REQUEST["telefono"];
 $conexion=conectarABBDD();
 
 ?>
@@ -19,14 +21,11 @@ $conexion=conectarABBDD();
 </head>
 <body>
 <?php
-        $sql = "UPDATE persona SET nombre=? WHERE id=?";
+        $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=? WHERE id=?";
         $select = $conexion->prepare($sql); // se prepara la sql
-        $select->execute([$nombre, $id]);
-
+        $select->execute([$nombre,$apellidos,$telefono, $id]);
+        header('Location:lista.php?actualizado');
+        exit;
 ?>
-    <div class="actualizado">
-        <p>Se ha actualizado en la base de datos</p>
-        <a href="lista.php">Pincha aqui para ir a la lista</a>
-    </div>
 </body>
 </html>

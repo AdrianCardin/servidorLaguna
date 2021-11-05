@@ -24,12 +24,19 @@ table, th, td {
     text-align: center;
 }
 .actualizado{
+    display: flex;
     border: 1px solid rgb(3, 255, 3);
+    background-color: black;
+    align-items: center;
+    color: white;
     position: relative;
     transform: translate(0,0%);
     text-align: center;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 30%;
+    margin-right: 30%;
+    height: 40px;
+    justify-content: space-around;
+    align-content: center;
 }
 .link{
     

@@ -1,6 +1,18 @@
 <?php
 require_once "../tools.php";
     $conexion=conectarABBDD();
+    if (isset($_REQUEST["eliminado"])) {
+        echo"<div class='actualizado'>Se ha eliminado el componente</div>"; 
+        echo "<br>";
+    }if (isset($_REQUEST["actualizado"])) {
+        echo"<div class='actualizado'>Se ha actualizado el componente</div>"; 
+        echo "<br>";
+    }if (isset($_REQUEST["creado"])) {
+        echo"<div class='actualizado'>Se ha creado el componente</div>"; 
+        echo "<br>";
+    }
+    
+    
 ?>
 
 
@@ -20,6 +32,7 @@ require_once "../tools.php";
         $select->execute([]);
         $resultado = $select->fetchAll(); // obtiene los resultados
 ?>
+
 <div class="tabla">
         <h1>Tabla resultado</h1>
         <table>
@@ -31,11 +44,11 @@ require_once "../tools.php";
 
             <?php
             //nombres de la obtencion de bbdd con su id
-            $idAyuda="IdPersona";
+            $idPersona="IdPersona";
             foreach ($resultado as $fila) {
-                echo "<tr><td><a href='ficha.php?id=$fila[$idAyuda]'>" . $fila['NombrePersona'] . "</a></td>";
-                echo "<td><a href='ficha.php?id=$fila[$idAyuda]'>" . $fila['NombreCategoria'] . "</a></td>";
-                echo "<td><a href='eliminar.php?id=$fila[$idAyuda]'> X </a></td></tr>";
+                echo "<tr><td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
+                echo "<td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombreCategoria'] . "</a></td>";
+                echo "<td><a href='eliminar.php?id=$fila[$idPersona]'> X </a></td></tr>";
             }
             ?>
         </table>

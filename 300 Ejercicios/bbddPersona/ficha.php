@@ -19,7 +19,7 @@ $conexion=conectarABBDD();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css.css">
-    <title>Categoria Ficha</title>
+    <title>Ficha Persona</title>
 </head>
 <body>
     <div class="contenedor">
@@ -27,7 +27,12 @@ $conexion=conectarABBDD();
             <h1>Estas en la Categoria Ficha</h1>
             <p>Estas en la categoria de : </p>
             <input type="hidden" name="id" value=<?= $resultado[0]["id"] ?>>
+            <p>Nombre : </p>
             <input type="text" name="nombre" value=<?= $resultado[0]["nombre"] ?>>
+            <p>Apellido : </p>
+            <input type="text" name="apellidos" value=<?= $resultado[0]["apellidos"] ?>>
+            <p>telefono : </p>
+            <input type="text" name="telefono" value=<?= $resultado[0]["telefono"] ?>>
             <input type="submit" value="Enviar">
         </form>
     </div>

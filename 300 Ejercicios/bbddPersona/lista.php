@@ -15,7 +15,7 @@ require_once "../tools.php";
 </head>
 <body>
 <?php
-        $sql = "SELECT p.id as IdPersona, p.nombre AS NombrePersona , c.nombre AS NombreCategoria FROM categoria AS c , persona AS p WHERE p.categoriaId = c.id ORDER BY NombrePersona";
+        $sql = "SELECT p.id as IdPersona, p.nombre AS NombrePersona ,p.categoriaId AS personaCategoriaId, c.nombre AS NombreCategoria FROM categoria AS c , persona AS p WHERE p.categoriaId = c.id ORDER BY NombrePersona";
         $select = $conexion->prepare($sql); // se prepara la sql
         $select->execute([]);
         $resultado = $select->fetchAll(); // obtiene los resultados
@@ -45,9 +45,11 @@ require_once "../tools.php";
             <?php
             //nombres de la obtencion de bbdd con su id
             $idPersona="IdPersona";
+            $personaCategoriaId="personaCategoriaId";
+            $nombreCategoria="NombreCategoria";
             foreach ($resultado as $fila) {
                 echo "<tr><td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
-                echo "<td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombreCategoria'] . "</a></td>";
+                echo "<td><a href='modificarNombreCategoria.php?id=$fila[$personaCategoriaId]&nombre=$fila[$nombreCategoria]'>" . $fila['NombreCategoria'] . "</a></td>";
                 echo "<td><a href='eliminar.php?id=$fila[$idPersona]'> X </a></td></tr>";
             }
             ?>

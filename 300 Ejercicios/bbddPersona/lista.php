@@ -15,7 +15,7 @@ require_once "../tools.php";
 </head>
 <body>
 <?php
-        $sql = "SELECT p.id as IdPersona, p.nombre AS NombrePersona ,p.categoriaId AS personaCategoriaId, c.nombre AS NombreCategoria FROM categoria AS c , persona AS p WHERE p.categoriaId = c.id ORDER BY NombrePersona";
+        $sql = "SELECT p.id as IdPersona, p.nombre AS NombrePersona ,p.categoriaId AS personaCategoriaId, p.estrella AS estrella, c.nombre AS NombreCategoria FROM categoria AS c , persona AS p WHERE p.categoriaId = c.id ORDER BY NombrePersona";
         $select = $conexion->prepare($sql); // se prepara la sql
         $select->execute([]);
         $resultado = $select->fetchAll(); // obtiene los resultados
@@ -37,8 +37,10 @@ require_once "../tools.php";
         <h1>Tabla resultado</h1>
         <table>
             <tr>
+                <td>favorito</td>
                 <td>Nombre Persona</td>
                 <td>Nombre Categoria</td>
+                <td>Eliminar</td>
             </tr>
     
 
@@ -48,7 +50,8 @@ require_once "../tools.php";
             $personaCategoriaId="personaCategoriaId";
             $nombreCategoria="NombreCategoria";
             foreach ($resultado as $fila) {
-                echo "<tr><td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
+                echo "<tr><td><a href='ficha.php?id=$fila[$idPersona]'><img src='star-png0.png' alt='20px' width='20px'></a></td>";
+                echo "<td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
                 echo "<td><a href='modificarNombreCategoria.php?id=$fila[$personaCategoriaId]&nombre=$fila[$nombreCategoria]'>" . $fila['NombreCategoria'] . "</a></td>";
                 echo "<td><a href='eliminar.php?id=$fila[$idPersona]'> X </a></td></tr>";
             }

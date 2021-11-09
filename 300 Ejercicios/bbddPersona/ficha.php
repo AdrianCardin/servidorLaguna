@@ -60,6 +60,8 @@ if (isset($_REQUEST["id"])) {
             <input type="text" name="apellidos" value=<?= $apellido ?>>
             <p>telefono : </p>
             <input type="text" name="telefono" value=<?= $telefono ?>>
+            <p>favorito : </p>
+            <input type="text" name="telefono" value=<?= $telefono ?>>
             <p>Categoria : </p>
             <select name="CategoriaId" >
                     <?php

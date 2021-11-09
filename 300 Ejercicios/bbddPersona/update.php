@@ -3,13 +3,15 @@ require "../tools.php";
     $nombre=$_REQUEST["nombre"];
     $apellidos=$_REQUEST["apellidos"];
     $telefono=$_REQUEST["telefono"];
+    $categoria=$_REQUEST["CategoriaId"];
+    var_dump($categoria);
     
     $conexion = conectarABBDD();
     if ($_REQUEST["id"]=="") {
         
         $sql = "INSERT INTO persona (nombre,apellidos,telefono,estrella,categoriaId) VALUES (?,?,?,?,?)";
         $select = $conexion->prepare($sql); // se prepara la sql
-        $select->execute([$nombre,$apellidos,$telefono,0,1]);
+        $select->execute([$nombre,$apellidos,$telefono,0,$categoria]);
         header('Location:lista.php?creado');
         exit;
     }else{

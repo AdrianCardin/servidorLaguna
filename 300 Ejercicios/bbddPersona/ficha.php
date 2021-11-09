@@ -22,7 +22,10 @@ if (isset($_REQUEST["id"])) {
     $apellido="";
     $telefono="";
 }
-
+    $sqlCategoria="SELECT id,nombre FROM categoria ORDER BY nombre ";
+    $selectCategoria = $conexion->prepare($sqlCategoria); // se prepara la sql
+    $selectCategoria->execute([]);
+    $resultadoCategoria = $selectCategoria->fetchAll(); // obtiene los resultados
 
 ?>
 
@@ -47,6 +50,17 @@ if (isset($_REQUEST["id"])) {
             <input type="text" name="apellidos" value=<?= $apellido ?>>
             <p>telefono : </p>
             <input type="text" name="telefono" value=<?= $telefono ?>>
+            <p>Categoria : </p>
+            <select name="CategoriaId" >
+                    <?php
+                    foreach ($resultadoCategoria as $valor) {
+                       echo "<option value=".$valor["id"]." >".$valor["nombre"];    
+                       echo "</option>";
+                    }
+                ?>
+            </select>
+            <br>
+            <br>
             <input type="submit" value="Enviar">
         </form>
     </div>

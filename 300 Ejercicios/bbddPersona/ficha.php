@@ -15,6 +15,7 @@ if (isset($_REQUEST["id"])) {
         $nombre=$resultado[0]["nombre"];
         $apellido=$resultado[0]["apellidos"];
         $telefono=$resultado[0]["telefono"];
+        $personaCategoria=$resultado[0]["categoriaId"];
 }else{
     //no viene id
     $id="";
@@ -22,10 +23,19 @@ if (isset($_REQUEST["id"])) {
     $apellido="";
     $telefono="";
 }
+
+    //esto es para el scroll de las categorias
     $sqlCategoria="SELECT id,nombre FROM categoria ORDER BY nombre ";
     $selectCategoria = $conexion->prepare($sqlCategoria); // se prepara la sql
     $selectCategoria->execute([]);
     $resultadoCategoria = $selectCategoria->fetchAll(); // obtiene los resultados
+
+
+    //obtenemos el id de categoria de la persona y buscamos el nombre de la categoria con ese id
+    $sqlCategoriaPersona="SELECT nombre FROM categoria WHERE id=?  ORDER BY nombre ";
+    $IdCategoriaPersona= $conexion->prepare($sqlCategoriaPersona); // se prepara la sql
+    $IdCategoriaPersona->execute([$personaCategoria]);
+    $resultadoCategoriaPersona = $IdCategoriaPersona->fetchAll(); // obtiene los resultados
 
 ?>
 
@@ -53,9 +63,19 @@ if (isset($_REQUEST["id"])) {
             <p>Categoria : </p>
             <select name="CategoriaId" >
                     <?php
-                    foreach ($resultadoCategoria as $valor) {
-                       echo "<option value=".$valor["id"]." >".$valor["nombre"];    
-                       echo "</option>";
+
+                    if ($_REQUEST["id"]) {
+                        echo "<option value=".$resultado[0]["categoriaId"]." selected>".$resultadoCategoriaPersona[0]["nombre"]; 
+                        echo "</option>";
+                        foreach ($resultadoCategoria as $valor) {
+                            echo "<option value=".$valor["id"]." >".$valor["nombre"];    
+                            echo "</option>";
+                         }
+                    }else{
+                        foreach ($resultadoCategoria as $valor) {
+                           echo "<option value=".$valor["id"]." >".$valor["nombre"];    
+                           echo "</option>";
+                        }
                     }
                 ?>
             </select>

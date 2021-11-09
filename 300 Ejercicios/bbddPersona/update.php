@@ -3,7 +3,7 @@ require "../tools.php";
     $nombre=$_REQUEST["nombre"];
     $apellidos=$_REQUEST["apellidos"];
     $telefono=$_REQUEST["telefono"];
-    $categoria=$_REQUEST["CategoriaId"];
+    
     var_dump($categoria);
     
     $conexion = conectarABBDD();
@@ -16,11 +16,12 @@ require "../tools.php";
         exit;
     }else{
         $id=$_REQUEST["id"];// obtiene el id
+        $categoria=$_REQUEST["CategoriaId"]; // obtiene el id de la categoria de la persona
         
 
-        $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=? WHERE id=?";
+        $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=?, categoriaId=? WHERE id=?";
         $select = $conexion->prepare($sql); // se prepara la sql
-        $select->execute([$nombre,$apellidos,$telefono, $id]);
+        $select->execute([$nombre,$apellidos,$telefono,$categoria, $id]);
         header('Location:lista.php?actualizado');
         exit;
 

@@ -65,11 +65,17 @@ if (isset($_REQUEST["id"])) {
                     <?php
 
                     if ($_REQUEST["id"]) {
+                        // aqui se pinta el nombre de la categoria persona
                         echo "<option value=".$resultado[0]["categoriaId"]." selected>".$resultadoCategoriaPersona[0]["nombre"]; 
                         echo "</option>";
                         foreach ($resultadoCategoria as $valor) {
-                            echo "<option value=".$valor["id"]." >".$valor["nombre"];    
-                            echo "</option>";
+
+                            // con este if no saseguramos que no se repita la categoria que hemos seleccionado anteriormente
+                            if ($resultado[0]["categoriaId"]!=$valor["id"]) {
+                                echo "<option value=".$valor["id"]." >".$valor["nombre"];    
+                                echo "</option>";
+                                
+                            }
                          }
                     }else{
                         foreach ($resultadoCategoria as $valor) {

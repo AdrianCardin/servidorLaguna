@@ -49,8 +49,9 @@ require_once "../tools.php";
             $idPersona="IdPersona";
             $personaCategoriaId="personaCategoriaId";
             $nombreCategoria="NombreCategoria";
+            $estrella="estrella";
             foreach ($resultado as $fila) {
-                echo "<tr><td><a href='ficha.php?id=$fila[$idPersona]'><img src='star-png0.png' alt='20px' width='20px'></a></td>";
+                echo "<tr><td><a href='autoFav.php?id=$fila[$idPersona]'><img src='star-png$fila[$estrella].png' alt='15px' width='15px'></a></td>";
                 echo "<td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
                 echo "<td><a href='modificarNombreCategoria.php?id=$fila[$personaCategoriaId]&nombre=$fila[$nombreCategoria]'>" . $fila['NombreCategoria'] . "</a></td>";
                 echo "<td><a href='eliminar.php?id=$fila[$idPersona]'> X </a></td></tr>";

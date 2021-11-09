@@ -16,6 +16,13 @@ if (isset($_REQUEST["id"])) {
         $apellido=$resultado[0]["apellidos"];
         $telefono=$resultado[0]["telefono"];
         $personaCategoria=$resultado[0]["categoriaId"];
+        $estrella=$resultado[0]["estrella"];
+        
+    //obtenemos el id de categoria de la persona y buscamos el nombre de la categoria con ese id
+    $sqlCategoriaPersona="SELECT nombre FROM categoria WHERE id=?  ORDER BY nombre ";
+    $IdCategoriaPersona= $conexion->prepare($sqlCategoriaPersona); // se prepara la sql
+    $IdCategoriaPersona->execute([$personaCategoria]);
+    $resultadoCategoriaPersona = $IdCategoriaPersona->fetchAll(); // obtiene los resultados
 }else{
     //no viene id
     $id="";
@@ -31,11 +38,6 @@ if (isset($_REQUEST["id"])) {
     $resultadoCategoria = $selectCategoria->fetchAll(); // obtiene los resultados
 
 
-    //obtenemos el id de categoria de la persona y buscamos el nombre de la categoria con ese id
-    $sqlCategoriaPersona="SELECT nombre FROM categoria WHERE id=?  ORDER BY nombre ";
-    $IdCategoriaPersona= $conexion->prepare($sqlCategoriaPersona); // se prepara la sql
-    $IdCategoriaPersona->execute([$personaCategoria]);
-    $resultadoCategoriaPersona = $IdCategoriaPersona->fetchAll(); // obtiene los resultados
 
 ?>
 
@@ -60,8 +62,15 @@ if (isset($_REQUEST["id"])) {
             <input type="text" name="apellidos" value=<?= $apellido ?>>
             <p>telefono : </p>
             <input type="text" name="telefono" value=<?= $telefono ?>>
-            <p>favorito : </p>
-            <input type="text" name="telefono" value=<?= $telefono ?>>
+            <p>Favorito : (Marcar para ser Favorito) </p>
+            <?php
+            if ($estrella==1) {
+                echo "<input type='checkbox' name='favorito' checked>";
+            }else{
+                echo "<input type='checkbox' name='favorito'>";
+            }
+            ?>
+            
             <p>Categoria : </p>
             <select name="CategoriaId" >
                     <?php

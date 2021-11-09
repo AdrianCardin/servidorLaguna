@@ -4,23 +4,25 @@ require "../tools.php";
     $apellidos=$_REQUEST["apellidos"];
     $telefono=$_REQUEST["telefono"];
     $categoria=$_REQUEST["CategoriaId"]; // obtiene el id de la categoria de la persona
+    $favorito=$_REQUEST["favorito"];
+    $boolean = $favorito=="on" ? 1 : 0 ;
 
-    
     $conexion = conectarABBDD();
     if ($_REQUEST["id"]=="") {
         
-        
+        $boolean = $favorito=="on" ? 1 : 0 ;
         $sql = "INSERT INTO persona (nombre,apellidos,telefono,estrella,categoriaId) VALUES (?,?,?,?,?)";
         $select = $conexion->prepare($sql); // se prepara la sql
-        $select->execute([$nombre,$apellidos,$telefono,0,$categoria]);
+        $select->execute([$nombre,$apellidos,$telefono,$boolean,$categoria]);
         header('Location:lista.php?creado');
         exit;
     }else{
         $id=$_REQUEST["id"];// obtiene el id
+        
 
-        $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=?, categoriaId=? WHERE id=?";
+        $sql = "UPDATE persona SET nombre=?, apellidos=?, telefono=?,estrella=?, categoriaId=? WHERE id=?";
         $select = $conexion->prepare($sql); // se prepara la sql
-        $select->execute([$nombre,$apellidos,$telefono,$categoria, $id]);
+        $select->execute([$nombre,$apellidos,$telefono,$boolean,$categoria,$id]);
         header('Location:lista.php?actualizado');
         exit;
 

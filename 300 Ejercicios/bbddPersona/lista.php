@@ -1,18 +1,6 @@
 <?php
 require_once "../tools.php";
-    $conexion=conectarABBDD();
-    if (isset($_REQUEST["eliminado"])) {
-        echo"<div class='actualizado'>Se ha eliminado el componente</div>"; 
-        echo "<br>";
-    }if (isset($_REQUEST["actualizado"])) {
-        echo"<div class='actualizado'>Se ha actualizado el componente</div>"; 
-        echo "<br>";
-    }if (isset($_REQUEST["creado"])) {
-        echo"<div class='actualizado'>Se ha creado el componente</div>"; 
-        echo "<br>";
-    }
-    
-    
+    $conexion=conectarABBDD();   
 ?>
 
 
@@ -31,6 +19,18 @@ require_once "../tools.php";
         $select = $conexion->prepare($sql); // se prepara la sql
         $select->execute([]);
         $resultado = $select->fetchAll(); // obtiene los resultados
+
+
+        if (isset($_REQUEST["eliminado"])) {
+            echo"<div class='actualizado'>Se ha eliminado el componente</div>"; 
+            echo "<br>";
+        }if (isset($_REQUEST["actualizado"])) {
+            echo"<div class='actualizado'>Se ha actualizado el componente</div>"; 
+            echo "<br>";
+        }if (isset($_REQUEST["creado"])) {
+            echo"<div class='actualizado'>Se ha creado el componente</div>"; 
+            echo "<br>";
+        }
 ?>
 
 <div class="tabla">
@@ -53,6 +53,6 @@ require_once "../tools.php";
             ?>
         </table>
 </div>
-<a href="categoriaCrear.php" class="link">Pincha para crear</a>
+<a href="ficha.php" class="link">Pincha para crear</a>
 </body>
 </html>

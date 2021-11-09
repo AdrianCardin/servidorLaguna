@@ -1,6 +1,5 @@
 <?php
-function conectarABBDD()
-{
+function conectarABBDD(){
     $servidor = "localhost";
     $identificador = "root";
     $contrasenna = "";

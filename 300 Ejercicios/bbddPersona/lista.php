@@ -37,7 +37,7 @@ require_once "../tools.php";
         <h1>Tabla resultado</h1>
         <table>
             <tr>
-                <td>favorito</td>
+                <td>Favorito</td>
                 <td>Nombre Persona</td>
                 <td>Nombre Categoria</td>
                 <td>Eliminar</td>
@@ -53,7 +53,18 @@ require_once "../tools.php";
             foreach ($resultado as $fila) {
                 echo "<tr><td><a href='autoFav.php?id=$fila[$idPersona]'><img src='star-png$fila[$estrella].png' alt='15px' width='15px'></a></td>";
                 echo "<td><a href='ficha.php?id=$fila[$idPersona]'>" . $fila['NombrePersona'] . "</a></td>";
-                echo "<td><a href='modificarNombreCategoria.php?id=$fila[$personaCategoriaId]&nombre=$fila[$nombreCategoria]'>" . $fila['NombreCategoria'] . "</a></td>";
+                if ($fila[$personaCategoriaId]==1) {
+                    $class="Familia";
+                }elseif ($fila[$personaCategoriaId]==3) {
+                    $class="Trabajo";
+                }elseif ($fila[$personaCategoriaId]==4) {
+                    $class="Otros";
+                }elseif ($fila[$personaCategoriaId]==8) {
+                    $class="Estudios";
+                }elseif($fila[$personaCategoriaId]==16){
+                    $class="Prueba";
+                }
+                echo "<td class='$class'><a href='modificarNombreCategoria.php?id=$fila[$personaCategoriaId]&nombre=$fila[$nombreCategoria]'>" . $fila['NombreCategoria'] . "</a></td>";
                 echo "<td><a href='eliminar.php?id=$fila[$idPersona]'> X </a></td></tr>";
             }
             ?>

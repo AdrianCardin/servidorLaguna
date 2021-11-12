@@ -1,4 +1,16 @@
 <?php
+    session_start(); // se inicia la sesion
+    
+    if (!isset($_SESSION["codigoCookie"]) ) {
+        header("Location:SesionFormulario.php?personaListado");
+        exit;
+    }
+    
+
+?>
+
+
+<?php
 	require_once "_Varios.php";
 
 	$conexion = obtenerPdoConexionBD();

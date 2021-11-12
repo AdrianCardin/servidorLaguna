@@ -3,9 +3,11 @@
     session_start(); // se inicia la sesion
 
     if (isset($_REQUEST["comprobar"]) ) {
-        echo"<div class='comprobar'> No ha sido posible recuperar la sesion </div>";
+        echo"<div class='comprobar'> Vuelve a ingresar los campos </div>";
     }
-
+    if (isset($_REQUEST["personaListado"]) ) {
+        echo"<div class='comprobar'> Persona Listado </div>";
+    }
     if (isset($_SESSION["codigoCookie"]) ) {
         header("Location:PersonaListado.php");
         exit;

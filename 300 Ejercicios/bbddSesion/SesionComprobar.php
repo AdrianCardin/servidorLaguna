@@ -15,7 +15,7 @@
         $codigoCookie="";
         $conexion=conectarABBDD(); 
 
-        $sql = "SELECT identificador,contrasenna,codigoCookie FROM usuario WHERE identificador=? AND contrasenna=?";
+        $sql = "SELECT identificador,contrasenna,codigoCookie,id FROM usuario WHERE identificador=? AND contrasenna=?";
         $select = $conexion->prepare($sql); // se prepara la sql
         $select->execute([$identificador,$contrasenna]);
         $resultado = $select->fetchAll(); // obtiene los resultados
@@ -25,18 +25,13 @@
         foreach ($resultado as $valor) {
             $contrasennaBBDD=$valor["contrasenna"];
             $identificadorBBDD=$valor["identificador"];
-            $codigoCookie=$valor["codigoCookie"];
+            $codigoCookie=$valor["id"];
             
         }
-        var_dump("BBDD i ". $identificadorBBDD);
-        var_dump( "BBDD C ".$contrasennaBBDD);
-        var_dump( " BBDD Cookie -->> ".$codigoCookie);
-        var_dump( " i ".$identificador);
-        var_dump( " C ".$contrasenna);
 
 
         if(($identificadorBBDD==$identificador) && ($contrasennaBBDD == $contrasenna)){
-            $_SESSION["id"]=$codigoCookie;
+            $_SESSION["codigoCookie"]=$codigoCookie;
             header("Location:PersonaListado.php");
             exit;
         }else{
@@ -47,18 +42,3 @@
 
 
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-
-</body>
-</html>

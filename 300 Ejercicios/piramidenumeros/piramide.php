@@ -3,7 +3,7 @@
 $numfilas=9;
 // contador de filas
 $contador_filas = 1;
-
+echo "<pre>";
 for ($i = $numfilas ;  $i > 0 ;  $i--) {
 
     // Se imprimen "i" espacios en blanco al comienzo de cada fila
@@ -19,3 +19,4 @@ for ($i = $numfilas ;  $i > 0 ;  $i--) {
     /* Se incrementa el contador de filas */
     $contador_filas++;
 }
+echo "</pre>";

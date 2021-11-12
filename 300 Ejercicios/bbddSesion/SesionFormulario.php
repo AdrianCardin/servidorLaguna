@@ -1,38 +1,33 @@
 <?php
-    require "../tools.php";
-    session_start(); // se inicia la sesion
+    require_once "_Varios.php";
 
-    if (isset($_REQUEST["comprobar"]) ) {
-        echo"<div class='comprobar'> Vuelve a ingresar los campos </div>";
+    if (sesionIniciada()) {
+        redireccionar("PersonaListado.php");
     }
-    if (isset($_REQUEST["personaListado"]) ) {
-        echo"<div class='comprobar'> Persona Listado </div>";
-    }
-    if (isset($_SESSION["codigoCookie"]) ) {
-        header("Location:PersonaListado.php");
-        exit;
-    }
-
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+
+
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset='UTF-8'>
 </head>
 <body>
-    <div class="formulario">
-            <form action="SesionComprobar.php" method="post">
-                <p>Usuario</p>
-                <input type="text" name="identificador">
-                <p>Contraseña</p>
-                <input type="password" name="contrasenna">
-                <input type="submit" value="Enviar">
-            </form>
-    </div>
-    
+
+<?php if (isset($_REQUEST["error"])) { ?>
+    <h1 style="color: red">Fallo de autenticación, intentelo de nuevo</h1>
+<?php } ?>
+
+<form action="SesionComprobar.php" method="post">
+    <label for='identificador'>Usuario</label><br>
+    <input type="text" name="identificador"><br><br>
+    <label for='contrasenna'>Contraseña</label><br>
+    <input type="password" name="contrasenna"><br><br>
+
+    <input type="submit" name="enviar">
+</form>
+
 </body>
+
 </html>

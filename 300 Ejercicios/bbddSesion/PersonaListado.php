@@ -1,17 +1,9 @@
 <?php
-    session_start(); // se inicia la sesion
-    
-    if (!isset($_SESSION["codigoCookie"]) ) {
-        header("Location:SesionFormulario.php?personaListado");
-        exit;
-    }
-    
-
-?>
-
-
-<?php
 	require_once "_Varios.php";
+
+    if (!sesionIniciada()) {
+        redireccionar("SesionFormulario.php");
+    }
 
 	$conexion = obtenerPdoConexionBD();
 
@@ -47,6 +39,8 @@
 
 
 <body>
+
+Sesión iniciada por <?=$_SESSION["nombre"]?> [<?=$_SESSION["identificador"]?>] <a href='SesionCerrar.php'>Cerrar sesión</a>
 
 <h1>Listado de Personas</h1>
 

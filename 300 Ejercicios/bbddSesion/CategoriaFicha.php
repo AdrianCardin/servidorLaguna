@@ -1,6 +1,7 @@
 <?php
 	require_once "_Varios.php";
 
+    llamadaGuardian();
 	// Si NO viene id quieren CREAR una nueva entrada ($existe tomará false).
 	// Sin embargo, si VIENE id quieren VER la ficha de una categoría existente
 	// (y $existe tomará true).

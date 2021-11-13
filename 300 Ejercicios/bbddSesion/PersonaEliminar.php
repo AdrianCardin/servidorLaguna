@@ -1,5 +1,6 @@
 <?php
 	require_once "_Varios.php";
+	llamadaGuardian();
 
 	$conexionBD = obtenerPdoConexionBD();
 

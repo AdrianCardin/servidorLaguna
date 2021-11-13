@@ -1,9 +1,27 @@
 <?php
 	require_once "_Varios.php";
 
-    if (!sesionIniciada()) {
-        redireccionar("SesionFormulario.php");
+    if (!sesionIniciada() && isset($_COOKIE["id"]) && isset($_COOKIE["codigoCookie"])) {
+        $_SESSION["id"]=$_COOKIE["id"];
+        
+        $conexion = obtenerPdoConexionBD();
+        $sql = "SELECT identificador, nombre FROM usuario WHERE codigoCookie=? AND id=?";
+        $select = $conexion->prepare($sql);
+        $select->execute([$_COOKIE["codigoCookie"], $_COOKIE["id"]]); // Se añade el parámetro a la consulta preparada.
+        $obtenidas = $select->fetchAll();
+
+        foreach ($obtenidas as $fila) {
+            $_SESSION["identificador"]=$fila["identificador"];
+            $_SESSION["nombre"]=$fila["nombre"];
+            
+        }
+    }elseif(sesionIniciada()){
+        llamadaGuardian();
+    }else{
+        redireccionar("SesionFormulario.php?kkkk");
     }
+    //comprobamos que el codigo de la cookie con la de bbdd esta hecha
+    
 
 	$conexion = obtenerPdoConexionBD();
 

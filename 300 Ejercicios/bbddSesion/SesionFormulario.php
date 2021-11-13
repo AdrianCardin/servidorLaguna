@@ -1,8 +1,14 @@
 <?php
     require_once "_Varios.php";
+    
 
-    if (sesionIniciada()) {
-        redireccionar("PersonaListado.php");
+    
+    if (isset($_REQUEST["modificado"])) {
+        // si quitas las cookies te quito todas las cookies y empiezas con unas predefinidas para que puedas entrar
+        echo "<div>No debes modificar las cookies</div>";     
+        destruirCookies();   
+        setcookie("codigoCookie",-1 ,time()+60*20);
+        setcookie("id",-1 ,time()+60*20);
     }
 ?>
 
@@ -24,10 +30,12 @@
     <input type="text" name="identificador"><br><br>
     <label for='contrasenna'>Contraseña</label><br>
     <input type="password" name="contrasenna"><br><br>
+    <label for='recuerdame'>Recuerdame</label><br>
+    <input type="checkbox" name="recuerdame"><br><br>
 
     <input type="submit" name="enviar">
 </form>
-
+ 
 </body>
 
 </html>

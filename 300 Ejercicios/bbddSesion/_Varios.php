@@ -53,7 +53,8 @@ function destruirSesion()
 }
 function destruirCookies()
 {	
-	//destruimos tambien la cookieCodigo
+	//destruimos todas las cookies
+	setcookie("recuerdame","borrar" ,time()-60);
 	setcookie("codigoCookie","borrar" ,time()-60);
     setcookie("id","borrar" ,time()-60);
 }
@@ -112,17 +113,28 @@ function destruirCodigoCookie($id){
 }
 
 function llamadaGuardian(){
-	if (!guardian($_COOKIE["id"],$_COOKIE["codigoCookie"])) {
-        echo "dentro de guardian";
-        redireccionar("SesionFormulario.php?modificado");
-		//actualizamos el tiempo de la cookie cada vez que entre
-		if ($_COOKIE["recuerdame"]=="on") {
-			setcookie("id",$_COOKIE["codigoCookie"],time()+60); //cookie id
-			setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60); //cookie codigo 
-		}else{
-			setcookie("id",$_COOKIE["codigoCookie"],time()+60*20); //cookie id
-			setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60*20); //cookie codigo 
-		}
+	// la llamada guardian te quiere echar
+
+	if (isset($_COOKIE["id"]) && isset($_COOKIE["codigoCookie"])) {
+		if (guardian($_COOKIE["id"],$_COOKIE["codigoCookie"]) || isset($_SESSION["id"])) {
+
 		
-    }
+			if ($_COOKIE["recuerdame"]=="on") {
+				setcookie("id",$_COOKIE["codigoCookie"],time()+60); //cookie id
+				setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60); //cookie codigo 
+			}else{
+				setcookie("id",$_COOKIE["codigoCookie"],time()+60*20); //cookie id
+				setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60*20); //cookie codigo
+			}
+		
+
+
+		
+		//actualizamos el tiempo de la cookie cada vez que entre
+		
+    }else{
+		redireccionar("SesionCerrar.php");
+	}
+	}
 }
+

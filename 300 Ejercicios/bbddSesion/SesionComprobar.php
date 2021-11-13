@@ -22,7 +22,7 @@
         setcookie("id",0,time()-60);
         setcookie("codigoCookie",0,time()-60); // primero borramos la cookie que habia y creamos la nueva
         if ($_REQUEST["recuerdame"]=="on") {
-            setcookie("recuerdame",$numeroAleatorio,time()+60*60*24);
+            setcookie("recuerdame","on",time()+60*60*24);
             setcookie("codigoCookie",$numeroAleatorio,time()+60*60*24); //cookie codigo   
             setcookie("id",$fila["id"],time()+60*60*24); //cookie id
         }

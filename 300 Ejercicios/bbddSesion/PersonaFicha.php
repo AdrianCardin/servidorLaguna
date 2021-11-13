@@ -1,7 +1,8 @@
 <?php
 	require_once "_Varios.php";
 
-    llamadaGuardian();
+    condicionSuprema();
+    
     $conexion = obtenerPdoConexionBD();
 
 	// Si NO viene id quieren CREAR una nueva entrada ($existe tomará false).

@@ -45,96 +45,112 @@ function sesionIniciada(): bool
 }
 
 function destruirSesion()
-{	
+{
 	//destruimos tambien la cookieCodigo
-	setcookie("codigoCookie","borrar" ,time()-60);
-    session_destroy();
-    unset($_SESSION);
+	setcookie("codigoCookie", "borrar", time() - 60);
+	session_destroy();
+	unset($_SESSION);
 }
 function destruirCookies()
-{	
+{
 	//destruimos todas las cookies
-	setcookie("recuerdame","borrar" ,time()-60);
-	setcookie("codigoCookie","borrar" ,time()-60);
-    setcookie("id","borrar" ,time()-60);
+	setcookie("recuerdame", "borrar", time() - 60);
+	setcookie("codigoCookie", "borrar", time() - 60);
+	setcookie("id", "borrar", time() - 60);
 }
-function updateCodigoCookie(int $codigoCookie , $id){
+function updateCodigoCookie(int $codigoCookie, $id)
+{
 	$conexion = obtenerPdoConexionBD();
-    $sql = "UPDATE usuario SET codigoCookie=? WHERE id=? ";
-    $select = $conexion->prepare($sql);
-    $select->execute([$codigoCookie,$id]); // Se añade el parámetro a la consulta preparada.
-    
+	$sql = "UPDATE usuario SET codigoCookie=? WHERE id=? ";
+	$select = $conexion->prepare($sql);
+	$select->execute([$codigoCookie, $id]); // Se añade el parámetro a la consulta preparada.
+
 }
-function updateCodigoCookieNullBBDD($id){
+function updateCodigoCookieNullBBDD($id)
+{
 	$conexion = obtenerPdoConexionBD();
-    $sql = "UPDATE usuario SET codigoCookie=NULL WHERE id=? ";
-    $select = $conexion->prepare($sql);
-    $select->execute([$id]); // Se añade el parámetro a la consulta preparada.
-    
+	$sql = "UPDATE usuario SET codigoCookie=NULL WHERE id=? ";
+	$select = $conexion->prepare($sql);
+	$select->execute([$id]); // Se añade el parámetro a la consulta preparada.
+
 }
 
-function guardian($id , $codigoCookie){
+function guardian($id, $codigoCookie)
+{	
+	
 	// obtenemos el id y el codigoCookie de la bbdd y la comparamos con lo que nos dan
 	$conexion = obtenerPdoConexionBD();
-    $sql = "SELECT codigoCookie FROM usuario WHERE id=?";
-    $select = $conexion->prepare($sql);
-    $select->execute([$id]); // Se añade el parámetro a la consulta preparada.
-    $obtenidas = $select->fetchAll();
+	$sql = "SELECT codigoCookie FROM usuario WHERE id=?";
+	$select = $conexion->prepare($sql);
+	$select->execute([$id]); // Se añade el parámetro a la consulta preparada.
+	$obtenidas = $select->fetchAll();
 
-	
+
 	foreach ($obtenidas as $fila) {
-		$codigoCookieBBDD=$fila["codigoCookie"];
+		$codigoCookieBBDD = $fila["codigoCookie"];
 	}
 
-	if ($codigoCookie==NULL || $codigoCookieBBDD==NULL) {
+	if ($codigoCookie == NULL || $codigoCookieBBDD == NULL) {
 		return false;
 	}
-	
-	/*var_dump("Type of codigo Coo ---> " . gettype($codigoCookie));
-	var_dump("<br>");
-	var_dump("Type of codigo Coo BBDD ---> " . gettype($codigoCookieBBDD));
-	var_dump("<br>");
-	var_dump("Codigo cookie ---> " . $codigoCookie);
-	var_dump("<br>");
-	var_dump("Codigo cookie BBDD---> " . $codigoCookieBBDD);
-	var_dump("<br>");
-	var_dump("comparacion ---> " . strcmp($codigoCookie,$codigoCookieBBDD));
-	*/
-	
-	return strcmp($codigoCookie,$codigoCookieBBDD) == 0;
+
+	return strcmp($codigoCookie, $codigoCookieBBDD) == 0;
 }
 
-function destruirCodigoCookie($id){
+function destruirCodigoCookie($id)
+{
 
 	$conexion = obtenerPdoConexionBD();
-    $sql = "UPDATE usuario SET codigoCookie=NULL WHERE id=? ";
-    $select = $conexion->prepare($sql);
-    $select->execute([$id]); // Se añade el parámetro a la consulta preparada.
+	$sql = "UPDATE usuario SET codigoCookie=NULL WHERE id=? ";
+	$select = $conexion->prepare($sql);
+	$select->execute([$id]); // Se añade el parámetro a la consulta preparada.
 }
 
-function llamadaGuardian(){
+function llamadaGuardian()
+{
 	// la llamada guardian te quiere echar
 
 	if (isset($_COOKIE["id"]) && isset($_COOKIE["codigoCookie"])) {
-		if (guardian($_COOKIE["id"],$_COOKIE["codigoCookie"]) || isset($_SESSION["id"])) {
+		if (guardian($_COOKIE["id"], $_COOKIE["codigoCookie"]) || isset($_SESSION["id"])) {
 
-		
-			if ($_COOKIE["recuerdame"]=="on") {
-				setcookie("id",$_COOKIE["codigoCookie"],time()+60); //cookie id
-				setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60); //cookie codigo 
-			}else{
-				setcookie("id",$_COOKIE["codigoCookie"],time()+60*20); //cookie id
-				setcookie("codigoCookie",$_COOKIE["codigoCookie"],time()+60*20); //cookie codigo
+
+			if ($_COOKIE["recuerdame"] == "on") {
+				setcookie("id", $_COOKIE["id"], time() + 60*60*24); //cookie id
+				setcookie("codigoCookie", $_COOKIE["codigoCookie"], time() + 60*60*24); //cookie codigo 
+			} else {
+				setcookie("id", $_COOKIE["id"], time() + 60 * 20); //cookie id
+				setcookie("codigoCookie", $_COOKIE["codigoCookie"], time() + 60 * 20); //cookie codigo
 			}
-		
 
+			//actualizamos el tiempo de la cookie cada vez que entre
 
-		
-		//actualizamos el tiempo de la cookie cada vez que entre
-		
-    }else{
-		redireccionar("SesionCerrar.php");
+		} else {
+			redireccionar("SesionCerrar.php");
+		}
+
 	}
-	}
+	
 }
 
+function condicionSuprema(){
+	
+	if (!sesionIniciada() && isset($_COOKIE["id"]) && isset($_COOKIE["codigoCookie"])) {
+        $_SESSION["id"] = $_COOKIE["id"];
+        $conexion = obtenerPdoConexionBD();
+        $sql = "SELECT nombre,identificador FROM usuario WHERE codigoCookie=? AND id=?";
+        $select = $conexion->prepare($sql);
+        $select->execute([$_COOKIE["codigoCookie"], $_COOKIE["id"]]); // Se añade el parámetro a la consulta preparada.
+        $obtenidas = $select->fetchAll();
+
+        foreach ($obtenidas as $fila) {
+            $_SESSION["nombre"] = $fila["nombre"];
+            $_SESSION["identificador"] = $fila["identificador"];
+        }
+
+    } elseif (sesionIniciada() || isset($_SESSION["id"])) {
+        llamadaGuardian();
+    } else {
+        
+        redireccionar("SesionFormulario.php?kkkk");
+    }
+}

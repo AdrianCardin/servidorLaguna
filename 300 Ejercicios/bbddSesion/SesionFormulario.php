@@ -1,6 +1,6 @@
 <?php
     require_once "_Varios.php";
-    
+    require_once "_Sesion.php";
 
     
     if (isset($_REQUEST["modificado"])) {

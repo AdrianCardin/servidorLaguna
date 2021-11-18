@@ -76,8 +76,8 @@ function updateCodigoCookieNullBBDD($id)
 }
 
 function guardian($id, $codigoCookie)
-{	
-	
+{
+
 	// obtenemos el id y el codigoCookie de la bbdd y la comparamos con lo que nos dan
 	$conexion = obtenerPdoConexionBD();
 	$sql = "SELECT codigoCookie FROM usuario WHERE id=?";
@@ -115,8 +115,8 @@ function llamadaGuardian()
 
 
 			if ($_COOKIE["recuerdame"] == "on") {
-				setcookie("id", $_COOKIE["id"], time() + 60*60*24); //cookie id
-				setcookie("codigoCookie", $_COOKIE["codigoCookie"], time() + 60*60*24); //cookie codigo 
+				setcookie("id", $_COOKIE["id"], time() + 60 * 60 * 24); //cookie id
+				setcookie("codigoCookie", $_COOKIE["codigoCookie"], time() + 60 * 60 * 24); //cookie codigo 
 			} else {
 				setcookie("id", $_COOKIE["id"], time() + 60 * 20); //cookie id
 				setcookie("codigoCookie", $_COOKIE["codigoCookie"], time() + 60 * 20); //cookie codigo
@@ -127,30 +127,28 @@ function llamadaGuardian()
 		} else {
 			redireccionar("SesionCerrar.php");
 		}
-
 	}
-	
 }
 
-function condicionSuprema(){
-	
+function condicionSuprema()
+{
+
 	if (!sesionIniciada() && isset($_COOKIE["id"]) && isset($_COOKIE["codigoCookie"])) {
-        $_SESSION["id"] = $_COOKIE["id"];
-        $conexion = obtenerPdoConexionBD();
-        $sql = "SELECT nombre,identificador FROM usuario WHERE codigoCookie=? AND id=?";
-        $select = $conexion->prepare($sql);
-        $select->execute([$_COOKIE["codigoCookie"], $_COOKIE["id"]]); // Se añade el parámetro a la consulta preparada.
-        $obtenidas = $select->fetchAll();
+		$_SESSION["id"] = $_COOKIE["id"];
+		$conexion = obtenerPdoConexionBD();
+		$sql = "SELECT nombre,identificador FROM usuario WHERE codigoCookie=? AND id=?";
+		$select = $conexion->prepare($sql);
+		$select->execute([$_COOKIE["codigoCookie"], $_COOKIE["id"]]); // Se añade el parámetro a la consulta preparada.
+		$obtenidas = $select->fetchAll();
 
-        foreach ($obtenidas as $fila) {
-            $_SESSION["nombre"] = $fila["nombre"];
-            $_SESSION["identificador"] = $fila["identificador"];
-        }
+		foreach ($obtenidas as $fila) {
+			$_SESSION["nombre"] = $fila["nombre"];
+			$_SESSION["identificador"] = $fila["identificador"];
+		}
+	} elseif (sesionIniciada() || isset($_SESSION["id"])) {
+		llamadaGuardian();
+	} else {
 
-    } elseif (sesionIniciada() || isset($_SESSION["id"])) {
-        llamadaGuardian();
-    } else {
-        
-        redireccionar("SesionFormulario.php?kkkk");
-    }
+		redireccionar("SesionFormulario.php?kkkk");
+	}
 }

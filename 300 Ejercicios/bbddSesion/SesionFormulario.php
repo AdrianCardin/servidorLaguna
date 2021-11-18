@@ -2,6 +2,9 @@
     require_once "_Varios.php";
     require_once "_Sesion.php";
 
+    if (comprobarRenovarSesion()) {
+        redireccionar("PersonaListado.php");
+    }
     
     if (isset($_REQUEST["modificado"])) {
         // si quitas las cookies te quito todas las cookies y empiezas con unas predefinidas para que puedas entrar

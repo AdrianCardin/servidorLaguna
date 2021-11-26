@@ -12,7 +12,7 @@ class DAO
         $servidor = "localhost";
         $identificador = "root";
         $contrasenna = "";
-        $bd = "Agenda"; // Schema
+        $bd = "agenda"; // Schema
         $opciones = [
             PDO::ATTR_EMULATE_PREPARES => false, // Modo emulación desactivado para prepared statements "reales"
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Que los errores salgan como excepciones.

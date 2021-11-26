@@ -1,18 +1,10 @@
 <?php
-    require_once "_Varios.php";
-    require_once "_Sesion.php";
+    require_once "__RequireOnceComunes.php";
 
-    salirSiSesionFalla();
+    // salirSiSesionFalla();
 
-    $conexion = obtenerPdoConexionBD();
 
-    // Los campos que incluyo en el SELECT son los que luego podré leer
-    // con $fila["campo"].
-    $sql = "SELECT id, nombre FROM categoria ORDER BY nombre";
-
-    $sentencia = $conexion->prepare($sql);
-    $sentencia->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
-    $rs = $sentencia->fetchAll();
+    $categorias=DAO::categoriaObtenerTodas();
 
     // INTERFAZ:
     // $rs
@@ -27,9 +19,7 @@
 </head>
 
 <body>
-
-Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] ?>] <a href='SesionCerrar.php'>Cerrar
-    sesión</a>
+<?php pintarCabecera(); ?>
 
 <h1>Listado de Categorías</h1>
 
@@ -40,10 +30,10 @@ Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] 
         <th></th>
     </tr>
 
-    <?php foreach ($rs as $fila) { ?>
+    <?php foreach ($categorias as $categoria) { ?>
         <tr>
-            <td><a href='CategoriaFicha.php?id=<?= $fila["id"] ?>'><?= $fila["nombre"] ?></a></td>
-            <td><a href='CategoriaEliminar.php?id=<?= $fila["id"] ?>'>(X) </a></td>
+            <td><a href='CategoriaFicha.php?id=<?= $categoria->getId(); ?>'><?= $categoria->getNombre(); ?></a></td>
+            <td><a href='CategoriaEliminar.php?id=<?= $categoria->getId(); ?>'>(X) </a></td>
         </tr>
     <?php } ?>
 
@@ -58,6 +48,8 @@ Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] 
 
 <a href='PersonaListado.php'>Gestionar listado de Personas</a>
 
+
+<?php pintarPie(); ?>
 </body>
 
 </html>

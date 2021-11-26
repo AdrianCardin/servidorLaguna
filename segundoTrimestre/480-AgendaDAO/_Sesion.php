@@ -11,7 +11,7 @@ function entrarSiSesionIniciada()
 
 function salirSiSesionFalla()
 {
-    if (!comprobarRenovarSesion()) redireccionar("SesionFormulario.php");
+    // if (!comprobarRenovarSesion()) redireccionar("SesionFormulario.php");
 }
 
 function comprobarRenovarSesion(): bool

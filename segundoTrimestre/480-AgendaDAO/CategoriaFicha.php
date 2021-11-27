@@ -1,6 +1,5 @@
 <?php
-    require_once "_Varios.php";
-    require_once "_Sesion.php";
+    require_once "__RequireOnceComunes.php";
 
     salirSiSesionFalla();
 
@@ -15,14 +14,8 @@
         // Se recoge el parámetro "id" de la request.
         $categoriaId = (int)$_REQUEST["id"];
 
-        $conexion = obtenerPdoConexionBD();
-        $sqlCategoria = "SELECT nombre FROM categoria WHERE id=?";
-        $select = $conexion->prepare($sqlCategoria);
-        $select->execute([$categoriaId]); // Se añade el parámetro a la consulta preparada.
-        $fila = $select->fetch();
-
-        // Con esto, accedemos a los datos de la primera (y esperemos que única) fila que haya venido.
-        $categoriaNombre = $fila["nombre"];
+        $categoriaConsulta=DAO::categoriaObtenerPorId($categoriaId);
+        $categoriaNombre=$categoriaConsulta->getNombre();
     }
 
 
@@ -43,8 +36,7 @@
 
 <body>
 
-Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] ?>] <a href='SesionCerrar.php'>Cerrar
-    sesión</a>
+<?php pintarCabecera(); ?>
 
 <h1><?= (!$existe) ? "Nueva categoría" : "Ficha de categoría" ?></h1>
 
@@ -72,6 +64,8 @@ Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] 
 <br/>
 
 <a href='CategoriaListado.php'>Volver al listado de categorías.</a>
+
+<?php pintarPie(); ?>
 
 </body>
 

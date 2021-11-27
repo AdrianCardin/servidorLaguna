@@ -1,10 +1,8 @@
 <?php
-    require_once "_Varios.php";
-    require_once "_Sesion.php";
+    require_once "__RequireOnceComunes.php";
 
     salirSiSesionFalla();
 
-    $conexion = obtenerPdoConexionBD();
 
     // Si NO viene id quieren CREAR una nueva entrada ($existe tomará false).
     // Sin embargo, si VIENE id quieren VER la ficha de una categoría existente
@@ -16,27 +14,18 @@
 
     if (!$existe) {
         // Quieren CREAR una nueva entrada, así que es un INSERT.
-        $sql = "INSERT INTO categoria (nombre) VALUES (?)";
-        $parametros = [$nombre];
+        DAO::categoriaCrear($nombre);
+
     } else { // Quieren actualizar, así que es un UPDATE.
         // Se recoge TAMBIÉN el id.
         $id = (int)$_REQUEST["id"];
 
+        $categoriaNombre=DAO::categoriaObtenerPorId($id);
         // Quieren MODIFICAR una categoría existente y es un UPDATE.
-        $sql = "UPDATE categoria SET nombre=? WHERE id=?";
-        $parametros = [$nombre, $id];
+        $nombre=$categoriaNombre->getNombre();
+        $id=$categoriaNombre->getId();
+        $correcto=DAO::categoriaActualizar($categoriaNombre);
     }
-
-    $sentencia = $conexion->prepare($sql);
-
-    //Esta llamada devuelve true o false según si la ejecución de la sentencia ha ido bien o mal.
-    $sqlConExito = $sentencia->execute($parametros); // Se añaden los parámetros a la consulta preparada.
-
-    // Está todo correcto de forma normal si NO ha habido errores y se ha visto afectada UNA fila.
-    $correcto = ($sqlConExito && $sentencia->rowCount() == 1);
-
-    // Si los datos no se habían modificado, también está correcto pero es "raro".
-    $datosNoModificados = ($sqlConExito && $sentencia->rowCount() == 0);
 
 
     // INTERFAZ:
@@ -89,6 +78,7 @@ if ($correcto || $datosNoModificados) { ?>
 
     <?php
 }
+var_dump($existe);
 ?>
 
 <a href='CategoriaListado.php'>Volver al listado de categorías.</a>

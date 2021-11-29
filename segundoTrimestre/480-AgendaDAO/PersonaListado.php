@@ -1,27 +1,9 @@
 <?php
-    require_once "_Varios.php";
-    require_once "_Sesion.php";
+    require_once "__RequireOnceComunes.php";
 
     // salirSiSesionFalla();
 
-    $conexion = obtenerPdoConexionBD();
-
-    $sql = "
-       SELECT
-            p.id       AS p_id,
-            p.nombre   AS p_nombre,
-            p.telefono AS p_telefono,
-            c.id       AS c_id,
-            c.nombre   AS c_nombre
-        FROM
-           persona AS p INNER JOIN categoria AS c
-           ON p.categoriaId = c.id
-        ORDER BY p.nombre
-    ";
-
-    $sentencia = $conexion->prepare($sql);
-    $sentencia->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
-    $rs = $sentencia->fetchAll();
+    $personas=DAO::personaObtenerTodas();
 
     // INTERFAZ:
     // $rs
@@ -51,12 +33,12 @@ Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] 
         <th></th>
     </tr>
 
-    <?php foreach ($rs as $fila) { ?>
+    <?php foreach ($personas as $persona) { ?>
         <tr>
-            <td><a href='PersonaFicha.php?id=<?= $fila["p_id"] ?>'><?= $fila["p_nombre"] ?></a></td>
-            <td><a href='PersonaFicha.php?id=<?= $fila["p_id"] ?>'><?= $fila["p_telefono"] ?></a></td>
-            <td><a href='CategoriaFicha.php?id=<?= $fila["c_id"] ?>'><?= $fila["c_nombre"] ?></a></td>
-            <td><a href='PersonaEliminar.php?id=<?= $fila["p_id"] ?>'>(X) </a></td>
+            <td><a href='PersonaFicha.php?id=<?= $persona->getId(); ?>'><?= $persona->getNombre(); ?></a></td>
+            <td><a href='PersonaFicha.php?id=<?= $persona->getId(); ?>'><?=  $persona->getTelefono(); ?></a></td>
+            <td><a href='CategoriaFicha.php?id=<?= $persona->getId(); ?>'><?=  "categoria" /*$persona->obtenerCategoria();*/ ?></a></td>
+            <td><a href='PersonaEliminar.php?id=<?= $persona->getId(); ?>'>(X) </a></td>
         </tr>
     <?php } ?>
 

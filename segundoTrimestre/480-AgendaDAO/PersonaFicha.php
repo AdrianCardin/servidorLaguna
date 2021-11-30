@@ -9,7 +9,7 @@
     $existe = isset($_REQUEST["id"]);
 
     if (!$existe) { // Quieren CREAR una nueva entrada, así que no se cargan datos.
-        $persona=new Persona(0,"","","",false, "");
+        $persona=new Persona((int)0," "," "," ",false, 0);
     } else { 
         // Quieren VER la ficha de una entrada existente, cuyos datos se cargan.
         // Se recoge el parámetro "id" de la request.

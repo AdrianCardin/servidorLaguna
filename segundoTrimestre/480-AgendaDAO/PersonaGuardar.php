@@ -8,11 +8,11 @@
     // Sin embargo, si VIENE id quieren VER la ficha de una persona existente
     // (y $existe tomará true).
     $existe = isset($_REQUEST["id"]);
-    var_dump($existe);
+    
 
 
     if (!$existe) {
-        DAO::personaCrear(
+        $persona=DAO::personaCrear(
             $_REQUEST["nombre"],
             $_REQUEST["apellidos"],
             $_REQUEST["telefono"],
@@ -31,9 +31,9 @@
             $_REQUEST["estrella"],
             (int)$_REQUEST["categoriaId"]
         );
+        $persona=DAO::personaActualizar($persona);
     }
 
-    $persona=DAO::personaActualizar($persona);
 
 
     // INTERFAZ:
@@ -55,7 +55,7 @@
 <?php pintarCabecera(); ?>
 
 
-    <?php if ($existe) { ?>
+    <?php if ($existe || $persona) { ?>
         <h1>Inserción completada</h1>
         <p>Se ha insertado correctamente la nueva entrada de <?= $persona->getNombre() ?>.</p>
     <?php } else { ?>

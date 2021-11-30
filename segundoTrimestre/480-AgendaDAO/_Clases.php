@@ -47,6 +47,7 @@ class Categoria extends Dato implements JsonSerializable
 
     public function eliminar(): bool
     {
+        if ($this-> obtenerPersonasPertenecientes()) return false;
         return DAO::categoriaEliminarPorId($this->id);
     }
 
@@ -161,5 +162,9 @@ class Persona extends Dato implements JsonSerializable
         if ($this->categoria == null) $categoria = DAO::categoriaObtenerPorId($this->categoriaId);
 
         return $categoria;
+    }
+    public function perteneceA(Categoria $categoria): bool
+    {
+        return ($this->categoriaId == $categoria->getId());
     }
 }

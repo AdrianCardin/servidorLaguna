@@ -8,6 +8,7 @@
     // Sin embargo, si VIENE id quieren VER la ficha de una categoría existente
     // (y $existe tomará true).
     $existe = isset($_REQUEST["id"]);
+    $id = (int)$_REQUEST["id"];
 
     // Se recogen los datos del formulario de la request, excepto id.
     $nombre = $_REQUEST["nombre"];
@@ -18,14 +19,13 @@
 
     } else { // Quieren actualizar, así que es un UPDATE.
         // Se recoge TAMBIÉN el id.
-        $id = (int)$_REQUEST["id"];
 
         $categoria=DAO::categoriaObtenerPorId($id);
+
+        // obtengo el nombre para actualizar y lo cambio de categoria
         $categoria->setNombre($_REQUEST["nombre"]);
-        // Quieren MODIFICAR una categoría existente y es un UPDATE.
-        $nombre=$categoria->getNombre();
-        $id=$categoria->getId();
-        $correcto=DAO::categoriaActualizar($categoria);
+       
+        DAO::categoriaActualizar($categoria);
     }
 
 

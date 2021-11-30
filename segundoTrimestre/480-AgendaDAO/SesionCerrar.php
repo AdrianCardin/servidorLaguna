@@ -1,7 +1,6 @@
 <?php
 
-require_once "_Varios.php";
-require_once "_Sesion.php";
+require_once "__RequireOnceComunes.php";
 
 salirSiSesionFalla();
 

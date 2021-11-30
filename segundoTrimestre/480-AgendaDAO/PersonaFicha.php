@@ -1,10 +1,7 @@
 <?php
-    require_once "_Varios.php";
-    require_once "_Sesion.php";
+    require_once "__RequireOnceComunes.php";
 
     salirSiSesionFalla();
-
-    $conexion = obtenerPdoConexionBD();
 
     // Si NO viene id quieren CREAR una nueva entrada ($existe tomará false).
     // Sin embargo, si VIENE id quieren VER la ficha de una persona existente
@@ -12,31 +9,17 @@
     $existe = isset($_REQUEST["id"]);
 
     if (!$existe) { // Quieren CREAR una nueva entrada, así que no se cargan datos.
-        $personaNombre = "";
-        $personaApellidos = "";
-        $personaTelefono = "";
-        $personaCategoriaId = 0;
-    } else { // Quieren VER la ficha de una entrada existente, cuyos datos se cargan.
+        $persona=new Persona(0,"","","",false, "");
+    } else { 
+        // Quieren VER la ficha de una entrada existente, cuyos datos se cargan.
         // Se recoge el parámetro "id" de la request.
         $personaId = (int)$_REQUEST["id"];
 
-        $sqlPersona = "SELECT nombre, apellidos, telefono, categoriaId FROM persona WHERE id=?";
-        $select = $conexion->prepare($sqlPersona);
-        $select->execute([$personaId]); // Se añade el parámetro a la consulta preparada.
-        $fila = $select->fetch();
+        $persona=DAO::personaObtenerPorId($personaId);
 
-        // Con esto, accedemos a los datos de la primera (y esperemos que única) fila que haya venido.
-        $personaNombre = $fila["nombre"];
-        $personaApellidos = $fila["apellidos"];
-        $personaTelefono = $fila["telefono"];
-        $personaCategoriaId = $fila["categoriaId"];
     }
 
-    // Con lo siguiente se deja preparado un recordset con todas las categorías.
-    $sqlCategorias = "SELECT id, nombre FROM categoria ORDER BY nombre";
-    $select = $conexion->prepare($sqlCategorias);
-    $select->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
-    $rsCategorias = $select->fetchAll();
+    $categorias=DAO::categoriaObtenerTodas();
 
 
     // INTERFAZ:
@@ -57,37 +40,37 @@
 
 <body>
 
-Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] ?>] <a href='SesionCerrar.php'>Cerrar
-    sesión</a>
+<?php pintarCabecera(); ?>
 
 <h1><?= (!$existe) ? "Nueva persona" : "Ficha de persona" ?></h1>
 
-<form method='get' action='PersonaGuardar.php'>
+<form method='post' action='PersonaGuardar.php'>
 
     <?php if ($existe) { ?>
-        <input type='hidden' name='id' value='<?= $personaId ?>'/>
+        <input type='hidden' name='id' value='<?= $persona->getId() ?>'/>
     <?php } ?>
 
     <label for='nombre'>Nombre</label>
-    <input type='text' id='nombre' name='nombre' value='<?= $personaNombre ?>'/>
+    <input type='text' id='nombre' name='nombre' value='<?= $persona->getNombre(); ?>'/>
 
     <br><label for='apellidos'>Apellidos</label>
-    <input type='text' id='apellidos' name='apellidos' value='<?= $personaApellidos ?>'/>
+    <input type='text' id='apellidos' name='apellidos' value='<?= $persona->getApellidos(); ?>'/>
 
-    <br><label for='telefono'>Nombre</label>
-    <input type='text' id='telefono' name='telefono' value='<?= $personaTelefono ?>'/>
+    <br><label for='telefono'>Telefono</label>
+    <input type='text' id='telefono' name='telefono' value='<?= $persona->getTelefono(); ?>'/>
+
+    <br><label for='estrella'>Estrella</label>
+    <input type='text' id='estrella' name='estrella' value='<?= $persona->isEstrella(); ?>'/>
 
     <br><label for='categoriaId'>Categoría</label>
     <select id='categoriaId' name='categoriaId'>
         <?php
-        foreach ($rsCategorias as $filaCategoria) {
-            $categoriaId = (int)$filaCategoria["id"];
-            $categoriaNombre = $filaCategoria["nombre"];
+        foreach ($categorias as $categoria) {
 
-            if ($categoriaId == $personaCategoriaId) $seleccion = "selected";
-            else                                     $seleccion = "";
+            if ($persona->perteneceA($categoria)) $seleccion = "selected";
+            else                                  $seleccion = "";
 
-            echo "<option value='$categoriaId' $seleccion>$categoriaNombre</option>";
+            echo "<option value=' ".$categoria->getId()." ' $seleccion>". $categoria->getNombre() ."</option>";
 
             // Alternativa (peor):
             // if ($categoriaId == $personaCategoriaId) echo "<option value='$categoriaId' selected>$categoriaNombre</option>";

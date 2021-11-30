@@ -185,7 +185,7 @@ class DAO
             $persona = Self::personaCrearDesdeFila($fila);
             array_push($datos, $persona);
         }
-        
+
         return $datos;
     }
 

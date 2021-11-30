@@ -1,7 +1,7 @@
 <?php
     require_once "__RequireOnceComunes.php";
 
-    salirSiSesionFalla();
+    //salirSiSesionFalla();
 
     $personas=DAO::personaObtenerTodas();
 
@@ -19,8 +19,7 @@
 
 <body>
 
-Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] ?>] <a href='SesionCerrar.php'>Cerrar
-    sesión</a>
+<?php pintarCabecera(); ?>
 
 <h1>Listado de Personas</h1>
 
@@ -33,11 +32,12 @@ Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] 
         <th></th>
     </tr>
 
-    <?php foreach ($personas as $persona) { ?>
+    <?php foreach ($personas as $persona) { 
+         $categoria=DAO::categoriaObtenerPorId($persona->getCategoriaId());   ?>
         <tr>
             <td><a href='PersonaFicha.php?id=<?= $persona->getId(); ?>'><?= $persona->getNombre(); ?></a></td>
             <td><a href='PersonaFicha.php?id=<?= $persona->getId(); ?>'><?=  $persona->getTelefono(); ?></a></td>
-            <td><a href='CategoriaFicha.php?id=<?= $persona->getId(); ?>'><?=  "categoria" /*$persona->obtenerCategoria();*/ ?></a></td>
+            <td><a href='CategoriaFicha.php?id=<?= $categoria->getId(); ?>'><?=   $categoria->getNombre(); ?></a></td>
             <td><a href='PersonaEliminar.php?id=<?= $persona->getId(); ?>'>(X) </a></td>
         </tr>
     <?php } ?>

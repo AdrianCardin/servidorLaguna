@@ -14,17 +14,18 @@
 
     if (!$existe) {
         // Quieren CREAR una nueva entrada, así que es un INSERT.
-        DAO::categoriaCrear($nombre);
+        $categoria=DAO::categoriaCrear($nombre);
 
     } else { // Quieren actualizar, así que es un UPDATE.
         // Se recoge TAMBIÉN el id.
         $id = (int)$_REQUEST["id"];
 
-        $categoriaNombre=DAO::categoriaObtenerPorId($id);
+        $categoria=DAO::categoriaObtenerPorId($id);
+        $categoria->setNombre($_REQUEST["nombre"]);
         // Quieren MODIFICAR una categoría existente y es un UPDATE.
-        $nombre=$categoriaNombre->getNombre();
-        $id=$categoriaNombre->getId();
-        $correcto=DAO::categoriaActualizar($categoriaNombre);
+        $nombre=$categoria->getNombre();
+        $id=$categoria->getId();
+        $correcto=DAO::categoriaActualizar($categoria);
     }
 
 
@@ -44,42 +45,16 @@
 
 <body>
 
-Sesión iniciada por <?= $_SESSION["nombre"] ?> [<?= $_SESSION["identificador"] ?>] <a href='SesionCerrar.php'>Cerrar
-    sesión</a>
+<?php pintarCabecera(); ?>
 
-<?php
-// Todo bien tanto si se han guardado los datos nuevos como si no se habían modificado.
-if ($correcto || $datosNoModificados) { ?>
+
     <?php if (!$existe) { ?>
         <h1>Inserción completada</h1>
-        <p>Se ha insertado correctamente la nueva entrada de <?= $nombre ?>.</p>
+        <p>Se ha insertado correctamente la nueva entrada de <?= $categoria->getNombre(); ?>.</p>
     <?php } else { ?>
         <h1>Actualización completada</h1>
-        <p>Se han guardado correctamente los nuevos datos de <?= $nombre ?>.</p>
+        <p>Se han guardado correctamente los nuevos datos de <?= $categoria->getNombre();} ?></p>
 
-        <?php if ($datosNoModificados) { ?>
-            <p>En realidad, no había modificado nada, pero se ha quedado Vd. a gusto pulsando el botón de actualizar
-                :)</p>
-        <?php } ?>
-    <?php }
-    ?>
-
-    <?php
-} else {
-    ?>
-
-    <?php if (!$existe) { ?>
-        <h1>Error en la creación.</h1>
-        <p>No se ha podido crear la nueva categoría.</p>
-    <?php } else { ?>
-        <h1>Error en la actualización.</h1>
-        <p>No se han podido actualizar los datos de la categoría.</p>
-    <?php } ?>
-
-    <?php
-}
-var_dump($existe);
-?>
 
 <a href='CategoriaListado.php'>Volver al listado de categorías.</a>
 

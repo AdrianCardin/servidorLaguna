@@ -40,8 +40,18 @@ $rs = $sentencia->fetchAll();
 </head>
 
 <body>
+<script src="jquery.min.js"></script>
+<script src="main.js"></script>
 
 <h1>Listado de Mascotas-Dueño</h1>
+<div class="busqueda">
+    <label for="cajaBusqueda"></label>
+    <input type="text" name="cajaBusqueda" id="cajaBusqueda">
+</div>
+
+<div class="datos">
+
+</div>
 
 <table border='1'>
 
@@ -61,7 +71,6 @@ $rs = $sentencia->fetchAll();
 </table>
 
 <br>
-
 </body>
 
 </html>

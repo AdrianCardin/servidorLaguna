@@ -6,9 +6,18 @@ function buscarDatos(consulta){
         type: "POST",
         dataType: "html",
         data: {consulta:consulta},
-
-        success: function (response) {
-            $("#datos").html(response);
-        }
     });
+
+    done( function (response) {
+        $("#datos").html(response);
+    })
 }
+
+$(document).on('keyup', '#cajaBusqueda', function(){
+    var valor=$(this).val();
+    if (valor != "") {
+        buscarDatos(valor);
+    } else{
+        buscarDatos();
+    }
+})

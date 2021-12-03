@@ -25,7 +25,7 @@ $conexion = obtenerPdoConexionBD();
 
 // Los campos que incluyo en el SELECT son los que luego podré leer
 // con $fila["campo"].
-$sql = "SELECT duenno.nombre AS nombreDuenno , cats.nombre AS nombreCats from cats INNER JOIN duenno WHERE cats.id_duenno = duenno.id";
+$sql = "SELECT duenno.nombre AS nombreDuenno , cats.nombre AS nombreCats , cats.edad AS edadMascota from cats INNER JOIN duenno WHERE cats.id_duenno = duenno.id";
 
 $sentencia = $conexion->prepare($sql);
 $sentencia->execute([]); // Array vacío porque la consulta preparada no requiere parámetros.
@@ -40,24 +40,17 @@ $rs = $sentencia->fetchAll();
 </head>
 
 <body>
-<script src="jquery.min.js"></script>
-<script src="main.js"></script>
+
 
 <h1>Listado de Mascotas-Dueño</h1>
-<div class="busqueda">
-    <label for="cajaBusqueda"></label>
-    <input type="text" name="cajaBusqueda" id="cajaBusqueda">
-</div>
 
-<div class="datos">
-
-</div>
 
 <table border='1'>
 
     <tr>
         <th>Nombre dueño</th>
         <th>Nombre mascota</th>
+        <th>Edad mascota</th>
     </tr>
 
     <?php foreach ($rs as $fila) { ?>
@@ -65,6 +58,7 @@ $rs = $sentencia->fetchAll();
         <tr>
             <td><p><?=  $fila["nombreDuenno"] ?></p></td>
             <td><p><?= $fila["nombreCats"] ?></p></td>
+            <td><p><?= $fila["edadMascota"] ?></p></td>
         </tr>
     <?php } ?>
 

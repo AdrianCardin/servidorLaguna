@@ -77,7 +77,7 @@ function inicializar() {
     inputPersonaTelefono = document.getElementById("personaTelefono");
     inputPersonaCategoriaId = document.getElementById("personaCategoriaId");
 
-    document.getElementById('btnCategoriaCrear').addEventListener('click', // TODO ###);
+    document.getElementById('btnCategoriaCrear').addEventListener('click', clickCategoriaCrear);// TODO ###
     document.getElementById('btnPersonaCrear').addEventListener('click', clickPersonaCrear);
 
 
@@ -172,7 +172,19 @@ function blurPersonaModificar(input) {
 }
 
 function clickCategoriaEliminar(id) {
-// TODO ###
+    llamadaAjax("CategoriaEliminar.php", "id="+id,
+        function(texto) {
+            var operacionOK = JSON.parse(texto);
+            if (operacionOK) {
+                domCategoriaEliminar(id);
+            } else {
+                notificarUsuario("Error Ajax al eliminar: " + texto);
+            }
+        },
+        function(texto) {
+            notificarUsuario("Error Ajax al eliminar: " + texto);
+        }
+    );
 }
 
 function clickPersonaEliminar(id) {
@@ -228,7 +240,7 @@ function domCategoriaObjetoADiv(categoria) {
 }
 
 function domCategoriaObtenerDiv(pos) {
-// TODO ###
+    return divCategoriasDatos.children[pos];
 }
 
 function domCategoriaDivAObjeto(div) {
@@ -270,7 +282,9 @@ function domCategoriaLocalizarPosicion(idBuscado) {
 }
 
 function domCategoriaEliminar(id) {
-// TODO ###
+    let pos = domCategoriaLocalizarPosicion(id);
+    let div = domCategoriaObtenerDiv(pos);
+    div.remove();
 }
 
 function domCategoriaModificar(categoria) {

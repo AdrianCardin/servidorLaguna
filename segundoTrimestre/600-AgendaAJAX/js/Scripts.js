@@ -87,6 +87,19 @@ function inicializar() {
 
     // TODO ### llamadaAjax...
 
+    llamadaAjax("CategoriaObtenerTodas.php", "",
+        function(texto) {
+            var categoria = JSON.parse(texto);
+
+            for (var i=0; i<categoria.length; i++) {
+                domCategoriaInsertar(categoria[i]);
+            }
+        },
+        function(texto) {
+            notificarUsuario("Error Ajax al cargar personas al inicializar: " + texto);
+        }
+    );
+
     llamadaAjax("PersonaObtenerTodas.php", "",
         function(texto) {
             var personas = JSON.parse(texto);
@@ -255,8 +268,12 @@ function domCategoriaObtenerObjeto(pos) {
     return domCategoriaDivAObjeto(divCategoria);
 }
 
+
 function domCategoriaEjecutarInsercion(pos, categoria) {
-// TODO ###
+    let divReferencia = domCategoriaObtenerDiv(pos);
+    let divNuevo = domCategoriaObjetoADiv(categoria);
+
+    divPersonasDatos.insertBefore(divNuevo, divReferencia);
 }
 
 function domCategoriaInsertar(categoriaNueva, enOrden=false) {

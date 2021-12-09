@@ -32,16 +32,16 @@ class DAO
 
     private static function garantizarConexion()
     {
-        if (Self::$conexion == null) {
-            Self::$conexion = Self::obtenerPdoConexionBd();
+        if (self::$conexion == null) {
+            self::$conexion = self::obtenerPdoConexionBd();
         }
     }
 
     private static function ejecutarConsulta(string $sql, array $parametros): array
     {
-        Self::garantizarConexion();
+        self::garantizarConexion();
 
-        $select = Self::$conexion->prepare($sql);
+        $select = self::$conexion->prepare($sql);
         $select->execute($parametros);
         return $select->fetchAll(); // Se devuelve "el $rs"
     }
@@ -51,13 +51,13 @@ class DAO
     //   - int: el id autogenerado para el nuevo registro, si todo bien.
     private static function ejecutarInsert(string $sql, array $parametros): ?int
     {
-        Self::garantizarConexion();
+        self::garantizarConexion();
 
-        $insert = Self::$conexion->prepare($sql);
+        $insert = self::$conexion->prepare($sql);
         $sqlConExito = $insert->execute($parametros);
 
         if (!$sqlConExito) return null;
-        else return Self::$conexion->lastInsertId();
+        else return self::$conexion->lastInsertId();
     }
 
     // Ejecuta un Update o un Delete.
@@ -66,9 +66,9 @@ class DAO
     //   - 0, 1 u otro número positivo: OK (no errores) y estas son las filas afectadas.
     private static function ejecutarUpdel(string $sql, array $parametros): ?int
     {
-        Self::garantizarConexion();
+        self::garantizarConexion();
 
-        $updel = Self::$conexion->prepare($sql);
+        $updel = self::$conexion->prepare($sql);
         $sqlConExito = $updel->execute($parametros);
 
         if (!$sqlConExito) return null;
@@ -85,14 +85,14 @@ class DAO
 
     public static function categoriaObtenerPorId(int $id): ?Categoria
     {
-        $rs = Self::ejecutarConsulta(
+        $rs = self::ejecutarConsulta(
             "SELECT * FROM categoria WHERE id=?",
             [$id]
         );
 
         if ($rs) {
             $fila = $rs[0];
-            $categoria = Self::categoriaCrearDesdeFila($fila);
+            $categoria = self::categoriaCrearDesdeFila($fila);
             return $categoria;
         } else {
             return null;
@@ -101,14 +101,14 @@ class DAO
 
     public static function categoriaObtenerTodas(): array
     {
-        $rs = Self::ejecutarConsulta(
+        $rs = self::ejecutarConsulta(
             "SELECT * FROM categoria ORDER BY nombre",
             []
         );
 
         $datos = [];
         foreach ($rs as $fila) {
-            $categoria = Self::categoriaCrearDesdeFila($fila);
+            $categoria = self::categoriaCrearDesdeFila($fila);
             array_push($datos, $categoria);
         }
 
@@ -117,18 +117,18 @@ class DAO
 
     public static function categoriaCrear(string $nombre): ?Categoria
     {
-        $idAutogenerado = Self::ejecutarInsert(
+        $idAutogenerado = self::ejecutarInsert(
             "INSERT INTO categoria (nombre) VALUES (?)",
             [$nombre]
         );
 
         if ($idAutogenerado == null) return null;
-        else return Self::categoriaObtenerPorId($idAutogenerado);
+        else return self::categoriaObtenerPorId($idAutogenerado);
     }
 
     public static function categoriaActualizar(Categoria $categoria): ?Categoria
     {
-        $filasAfectadas = Self::ejecutarUpdel(
+        $filasAfectadas = self::ejecutarUpdel(
             "UPDATE categoria SET nombre=? WHERE id=?",
             [$categoria->getNombre(), $categoria->getId()]
         );
@@ -139,7 +139,7 @@ class DAO
 
     public static function categoriaEliminarPorId(int $id): bool
     {
-        $filasAfectadas = Self::ejecutarUpdel(
+        $filasAfectadas = self::ejecutarUpdel(
             "DELETE FROM categoria WHERE id=?",
             [$id]
         );
@@ -149,7 +149,7 @@ class DAO
 
     public static function categoriaEliminar(Categoria $categoria): bool
     {
-        return Self::categoriaEliminarPorId($categoria->getId());
+        return self::categoriaEliminarPorId($categoria->getId());
     }
 
 
@@ -163,12 +163,12 @@ class DAO
 
     public static function personaObtenerPorId(int $id): ?Persona
     {
-        $rs = Self::ejecutarConsulta(
+        $rs = self::ejecutarConsulta(
             "SELECT * FROM persona WHERE id=?",
             [$id]
         );
 
-        if ($rs) return Self::personaCrearDesdeFila($rs[0]);
+        if ($rs) return self::personaCrearDesdeFila($rs[0]);
         else return null;
     }
 
@@ -176,13 +176,13 @@ class DAO
     {
         $datos = [];
 
-        $rs = Self::ejecutarConsulta(
+        $rs = self::ejecutarConsulta(
             "SELECT * FROM persona ORDER BY nombre, apellidos",
             []
         );
 
         foreach ($rs as $fila) {
-            $persona = Self::personaCrearDesdeFila($fila);
+            $persona = self::personaCrearDesdeFila($fila);
             array_push($datos, $persona);
         }
 
@@ -191,18 +191,18 @@ class DAO
 
     public static function personaCrear(string $nombre, string $apellidos, string $telefono, bool $estrella, int $categoriaId): ?Persona
     {
-        $idAutogenerado = Self::ejecutarInsert(
+        $idAutogenerado = self::ejecutarInsert(
             "INSERT INTO persona (nombre, apellidos, telefono, estrella, categoriaId) VALUES (?, ?, ?, ?, ?)",
             [$nombre, $apellidos, $telefono, $estrella ? 1 : 0, $categoriaId]
         );
 
         if ($idAutogenerado == null) return null;
-        else return Self::personaObtenerPorId($idAutogenerado);
+        else return self::personaObtenerPorId($idAutogenerado);
     }
 
     public static function personaActualizar(Persona $persona): ?Persona
     {
-        $filasAfectadas = Self::ejecutarUpdel(
+        $filasAfectadas = self::ejecutarUpdel(
             "UPDATE persona SET nombre=?, apellidos=?, telefono=?, estrella=?, categoriaId=? WHERE id=?",
             [$persona->getNombre(), $persona->getApellidos(), $persona->getTelefono(), $persona->isEstrella() ? 1 : 0, $persona->getCategoriaId(), $persona->getId()]
         );
@@ -213,7 +213,7 @@ class DAO
 
     public static function personaEliminarPorId(int $id): bool
     {
-        $filasAfectadas = Self::ejecutarUpdel(
+        $filasAfectadas = self::ejecutarUpdel(
             "DELETE FROM persona WHERE id=?",
             [$id]
         );
@@ -223,6 +223,6 @@ class DAO
 
     public static function personaEliminar(Persona $persona): bool
     {
-        return Self::personaEliminarPorId($persona->id);
+        return self::personaEliminarPorId($persona->id);
     }
 }

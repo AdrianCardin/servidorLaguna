@@ -1,9 +1,7 @@
 // TODO Quedaría pendiente poner un timer para actualizar lo local si actualizan el servidor. Una solución óptima sería poner timestamp de modificación en la tabla y pedir categoriaObtenerModificadasDesde(timestamp), donde timestamp es la última vez que he pedido algo.
 
 
-
 window.onload = inicializar;
-
 
 
 // ---------- VARIABLES GLOBALES ----------
@@ -15,7 +13,6 @@ var inputPersonaNombre;
 var inputPersonaApellidos;
 var inputPersonaTelefono;
 var inputPersonaCategoriaId;
-
 
 
 // ---------- VARIOS DE BASE/UTILIDADES ----------
@@ -33,9 +30,9 @@ function llamadaAjax(url, parametros, manejadorOK, manejadorError) {
     request.open("POST", url);
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    request.onreadystatechange = function() {
-        if (this.readyState == 4) { // 4 equivale a "hemos terminado".
-            if (request.status == 200) { // 200 significa "todo bien".
+    request.onreadystatechange = function () {
+        if (this.readyState === 4) { // 4 equivale a "hemos terminado".
+            if (request.status === 200) { // 200 significa "todo bien".
                 manejadorOK(request.responseText);
             } else {
                 if (manejadorError != null) manejadorError(request.responseText);
@@ -60,62 +57,81 @@ function debug() {
 }
 
 
-
 // ---------- MANEJADORES DE EVENTOS / COMUNICACIÓN CON PHP ----------
 
 // TODO Estaría genial que estos métodos no metieran la mano para nada en el DOM, sino que lo hicieran todo a través de métodos domTalCosa:
 // Por ejemplo: disablearCamposPersonaCrear(), enablearCamposPersonaCrear(), obtenerObjetoPersonaDeCamposPersonaCrear()...
 
 function inicializar() {
-    divCategoriasDatos = // TODO ###
+    divCategoriasDatos = document.getElementById("categoriasDatos"); // TODO ###
     divPersonasDatos = document.getElementById("personasDatos");
 
-    inputCategoriaNombre = // TODO ###
-
+    inputCategoriaNombre = document.getElementById("categoriaNombre"); // TODO ###
     inputPersonaNombre = document.getElementById("personaNombre");
+
     inputPersonaApellidos = document.getElementById("personaApellidos");
     inputPersonaTelefono = document.getElementById("personaTelefono");
     inputPersonaCategoriaId = document.getElementById("personaCategoriaId");
 
-    document.getElementById('btnCategoriaCrear').addEventListener('click', clickCategoriaCrear);// TODO ###
+    document.getElementById('btnCategoriaCrear').addEventListener('click', clickCategoriaCrear);
     document.getElementById('btnPersonaCrear').addEventListener('click', clickPersonaCrear);
-
 
 
     // En los "Insertar" de a continuación no se fuerza la ordenación, ya que PHP
     // nos habrá dado los elementos en orden correcto y sería una pérdida de tiempo.
 
     // TODO ### llamadaAjax...
-
     llamadaAjax("CategoriaObtenerTodas.php", "",
-        function(texto) {
-            var categoria = JSON.parse(texto);
+        function (texto) {
+            var categorias = JSON.parse(texto);
 
-            for (var i=0; i<categoria.length; i++) {
-                domCategoriaInsertar(categoria[i]);
+            for (var i = 0; i < categorias.length; i++) {
+                domCategoriaInsertar(categorias[i]);
             }
         },
-        function(texto) {
-            notificarUsuario("Error Ajax al cargar personas al inicializar: " + texto);
+        function (texto) {
+            notificarUsuario("Error Ajax al cargar categorías al inicializar: " + texto);
         }
     );
 
     llamadaAjax("PersonaObtenerTodas.php", "",
-        function(texto) {
+        function (texto) {
             var personas = JSON.parse(texto);
 
-            for (var i=0; i<personas.length; i++) {
+            for (var i = 0; i < personas.length; i++) {
                 domPersonaInsertar(personas[i]);
             }
         },
-        function(texto) {
+        function (texto) {
             notificarUsuario("Error Ajax al cargar personas al inicializar: " + texto);
         }
     );
 }
 
 function clickCategoriaCrear() {
-// TODO ###
+    inputCategoriaNombre.disabled = true;
+
+    let categoria = {
+        "id": -1,
+        "nombre": inputCategoriaNombre.value,
+    }
+
+    llamadaAjax("CategoriaCrear.php", objetoAParametrosParaRequest(categoria),
+        function (texto) {
+            // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
+            var categoria = JSON.parse(texto);
+
+            // Se fuerza la ordenación, ya que este elemento podría no quedar ordenado si se pone al final.
+            domCategoriaInsertar(categoria, true);
+
+            inputCategoriaNombre.value = "";
+            inputCategoriaNombre.disabled = false;
+        },
+        function (texto) {
+            notificarUsuario("Error Ajax al crear: " + texto);
+            inputCategoriaNombre.disabled = false;
+        }
+    );
 }
 
 function clickPersonaCrear() {
@@ -125,15 +141,15 @@ function clickPersonaCrear() {
     inputPersonaCategoriaId.disabled = true;
 
     let persona = {
-        "id" : -1,
-        "nombre" : inputPersonaNombre.value,
-        "apellidos" : inputPersonaApellidos.value,
-        "telefono" : inputPersonaTelefono.value,
-        "categoriaId" : inputPersonaCategoriaId.value,
+        "id": -1,
+        "nombre": inputPersonaNombre.value,
+        "apellidos": inputPersonaApellidos.value,
+        "telefono": inputPersonaTelefono.value,
+        "categoriaId": inputPersonaCategoriaId.value,
     }
 
     llamadaAjax("PersonaCrear.php", objetoAParametrosParaRequest(persona),
-        function(texto) {
+        function (texto) {
             // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
             var persona = JSON.parse(texto);
 
@@ -149,7 +165,7 @@ function clickPersonaCrear() {
             inputPersonaCategoriaId.value = "";
             inputPersonaCategoriaId.disabled = false;
         },
-        function(texto) {
+        function (texto) {
             notificarUsuario("Error Ajax al crear: " + texto);
             inputPersonaNombre.disabled = false;
             inputPersonaApellidos.disabled = false;
@@ -169,8 +185,8 @@ function blurPersonaModificar(input) {
     let persona = domPersonaDivAObjeto(divPersona);
 
     llamadaAjax("PersonaActualizar.php", objetoAParametrosParaRequest(persona),
-        function(texto) {
-            if (texto != "null") {
+        function (texto) {
+            if (texto !== "null") {
                 // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
                 persona = JSON.parse(texto);
                 domPersonaModificar(persona);
@@ -178,31 +194,33 @@ function blurPersonaModificar(input) {
                 notificarUsuario("Error Ajax al modificar: " + texto);
             }
         },
-        function(texto) {
+        function (texto) {
             notificarUsuario("Error Ajax al modificar: " + texto);
         }
     );
 }
 
 function clickCategoriaEliminar(id) {
-    llamadaAjax("CategoriaEliminar.php", "id="+id,
-        function(texto) {
+    // TODO ###
+    llamadaAjax("CategoriaEliminar.php", "id=" + id,
+        function (texto) {
             var operacionOK = JSON.parse(texto);
+
             if (operacionOK) {
                 domCategoriaEliminar(id);
             } else {
                 notificarUsuario("Error Ajax al eliminar: " + texto);
             }
         },
-        function(texto) {
+        function (texto) {
             notificarUsuario("Error Ajax al eliminar: " + texto);
         }
     );
 }
 
 function clickPersonaEliminar(id) {
-    llamadaAjax("PersonaEliminar.php", "id="+id,
-        function(texto) {
+    llamadaAjax("PersonaEliminar.php", "id=" + id,
+        function (texto) {
             var operacionOK = JSON.parse(texto);
             if (operacionOK) {
                 domPersonaEliminar(id);
@@ -210,22 +228,21 @@ function clickPersonaEliminar(id) {
                 notificarUsuario("Error Ajax al eliminar: " + texto);
             }
         },
-        function(texto) {
+        function (texto) {
             notificarUsuario("Error Ajax al eliminar: " + texto);
         }
     );
 }
 
 
-
 // ---------- GESTIÓN DEL DOM ----------
 
 function domCrearDivInputText(textoValue, codigoOnblur) {
     let div = document.createElement("div");
-        let input = document.createElement("input");
-                input.setAttribute("type", "text");
-                input.setAttribute("value", textoValue);
-                input.setAttribute("onblur", codigoOnblur + " return false;");
+    let input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("value", textoValue);
+    input.setAttribute("onblur", codigoOnblur + " return false;");
     div.appendChild(input);
 
     return div;
@@ -233,19 +250,18 @@ function domCrearDivInputText(textoValue, codigoOnblur) {
 
 function domCrearDivImg(urlSrc, codigoOnclick) {
     let div = document.createElement("div");
-        let img = document.createElement("img");
-                img.setAttribute("src", urlSrc);
-                img.setAttribute("onclick", codigoOnclick + " return false;");
+    let img = document.createElement("img");
+    img.setAttribute("src", urlSrc);
+    img.setAttribute("onclick", codigoOnclick + " return false;");
     div.appendChild(img);
 
     return div;
 }
 
 
-
 function domCategoriaObjetoADiv(categoria) {
     let div = document.createElement("div");
-            div.setAttribute("id", "categoria-" + categoria.id);
+    div.setAttribute("id", "categoria-" + categoria.id);
     div.appendChild(domCrearDivInputText(categoria.nombre, "blurCategoriaModificar(this);"));
     div.appendChild(domCrearDivImg("img/Eliminar.png", "clickCategoriaEliminar(" + categoria.id + ");"));
 
@@ -253,6 +269,7 @@ function domCategoriaObjetoADiv(categoria) {
 }
 
 function domCategoriaObtenerDiv(pos) {
+    // TODO ###
     return divCategoriasDatos.children[pos];
 }
 
@@ -268,21 +285,21 @@ function domCategoriaObtenerObjeto(pos) {
     return domCategoriaDivAObjeto(divCategoria);
 }
 
-
 function domCategoriaEjecutarInsercion(pos, categoria) {
+    // TODO ###
     let divReferencia = domCategoriaObtenerDiv(pos);
     let divNuevo = domCategoriaObjetoADiv(categoria);
 
-    divPersonasDatos.insertBefore(divNuevo, divReferencia);
+    divCategoriasDatos.insertBefore(divNuevo, divReferencia);
 }
 
 function domCategoriaInsertar(categoriaNueva, enOrden=false) {
     // Si piden insertar en orden, se buscará su lugar. Si no, irá al final.
     if (enOrden) {
-        for (let pos=0; pos < divCategoriasDatos.children.length; pos++) {
+        for (let pos = 0; pos < divCategoriasDatos.children.length; pos++) {
             let categoriaActual = domCategoriaObtenerObjeto(pos);
 
-            if (categoriaNueva.nombre.localeCompare(categoriaActual.nombre) == -1) {
+            if (categoriaNueva.nombre.localeCompare(categoriaActual.nombre) === -1) {
                 // Si la categoría nueva va ANTES que la actual, este es el punto en el que insertarla.
                 domCategoriaEjecutarInsercion(pos, categoriaNueva);
                 return;
@@ -295,24 +312,37 @@ function domCategoriaInsertar(categoriaNueva, enOrden=false) {
 }
 
 function domCategoriaLocalizarPosicion(idBuscado) {
-// TODO ###
+    // TODO ###
+    var divsCategorias = divCategoriasDatos.children;
+
+    for (var pos = 0; pos < divsCategorias.length; pos++) {
+        let divCategoria = divsCategorias[pos];
+        let categoriaActualId = extraerId(divCategoria.id);
+
+        if (categoriaActualId == idBuscado) return (pos);
+    }
+
+    return -1;
 }
 
 function domCategoriaEliminar(id) {
+    // TODO ###
     let pos = domCategoriaLocalizarPosicion(id);
     let div = domCategoriaObtenerDiv(pos);
     div.remove();
 }
 
 function domCategoriaModificar(categoria) {
-// TODO
+    // TODO
+    domCategoriaEliminar(categoria.id);
+
+    // Se fuerza la ordenación, ya que este elemento podría no quedar ordenado si se pone al final.
+    domCategoriaInsertar(categoria, true);
 }
-
-
 
 function domPersonaObjetoADiv(persona) {
     let div = document.createElement("div");
-            div.setAttribute("id", "persona-" + persona.id);
+    div.setAttribute("id", "persona-" + persona.id);
     div.appendChild(domCrearDivInputText(persona.estrella, "blurPersonaModificar(this);"));
     div.appendChild(domCrearDivInputText(persona.nombre, "blurPersonaModificar(this);"));
     div.appendChild(domCrearDivInputText(persona.apellidos, "blurPersonaModificar(this);"));
@@ -350,17 +380,17 @@ function domPersonaEjecutarInsercion(pos, persona) {
     divPersonasDatos.insertBefore(divNuevo, divReferencia);
 }
 
-function domPersonaInsertar(personaNueva, enOrden=false) {
+function domPersonaInsertar(personaNueva, enOrden = false) {
     // Si piden insertar en orden, se buscará su lugar. Si no, irá al final.
     if (enOrden) {
-        for (let pos=0; pos < divPersonasDatos.children.length; pos++) {
+        for (let pos = 0; pos < divPersonasDatos.children.length; pos++) {
             let personaActual = domPersonaObtenerObjeto(pos);
 
             // Se generan cadenas compuestas por los campos clave para ordenar.
             let cadenaActual = personaActual.nombre + personaActual.apellidos + personaActual.id;
             let cadenaNueva = personaNueva.nombre + personaNueva.apellidos + personaNueva.id;
 
-            if (cadenaNueva.localeCompare(cadenaActual) == -1) {
+            if (cadenaNueva.localeCompare(cadenaActual) === -1) {
                 // Si la persona nueva va ANTES que la actual, este es el punto en el que insertarla.
                 domPersonaEjecutarInsercion(pos, personaNueva);
                 return;
@@ -375,7 +405,7 @@ function domPersonaInsertar(personaNueva, enOrden=false) {
 function domPersonaLocalizarPosicion(idBuscado) {
     var divsPersonas = divPersonasDatos.children;
 
-    for (var pos=0; pos < divsPersonas.length; pos++) {
+    for (var pos = 0; pos < divsPersonas.length; pos++) {
         let divPersona = divsPersonas[pos];
         let personaActualId = extraerId(divPersona.id);
 

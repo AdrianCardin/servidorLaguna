@@ -63,10 +63,10 @@ function debug() {
 // Por ejemplo: disablearCamposPersonaCrear(), enablearCamposPersonaCrear(), obtenerObjetoPersonaDeCamposPersonaCrear()...
 
 function inicializar() {
-    divCategoriasDatos = document.getElementById("categoriasDatos"); // TODO ###
+    divCategoriasDatos = document.getElementById("categoriasDatos"); 
     divPersonasDatos = document.getElementById("personasDatos");
 
-    inputCategoriaNombre = document.getElementById("categoriaNombre"); // TODO ###
+    inputCategoriaNombre = document.getElementById("categoriaNombre"); 
     inputPersonaNombre = document.getElementById("personaNombre");
 
     inputPersonaApellidos = document.getElementById("personaApellidos");
@@ -176,7 +176,23 @@ function clickPersonaCrear() {
 }
 
 function blurCategoriaModificar(input) {
-// TODO
+    let divCategoria = input.parentElement.parentElement;
+    let categoria = domCategoriaDivAObjeto(divCategoria);
+
+    llamadaAjax("CategoriaActualizar.php", objetoAParametrosParaRequest(categoria),
+        function (texto) {
+            if (texto !== "null") {
+                // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
+                categoria = JSON.parse(texto);
+                domCategoriaModificar(categoria);
+            } else {
+                notificarUsuario("Error Ajax al modificar: " + texto);
+            }
+        },
+        function (texto) {
+            notificarUsuario("Error Ajax al modificar: " + texto);
+        }
+    );
 }
 
 // TODO Si escribo false en el input para "quitar" la estrella, no se quita (se queda en true). Pasa algo. Depurar.
@@ -201,7 +217,7 @@ function blurPersonaModificar(input) {
 }
 
 function clickCategoriaEliminar(id) {
-    // TODO ###
+    
     llamadaAjax("CategoriaEliminar.php", "id=" + id,
         function (texto) {
             var operacionOK = JSON.parse(texto);
@@ -269,7 +285,7 @@ function domCategoriaObjetoADiv(categoria) {
 }
 
 function domCategoriaObtenerDiv(pos) {
-    // TODO ###
+   
     return divCategoriasDatos.children[pos];
 }
 
@@ -286,7 +302,7 @@ function domCategoriaObtenerObjeto(pos) {
 }
 
 function domCategoriaEjecutarInsercion(pos, categoria) {
-    // TODO ###
+    
     let divReferencia = domCategoriaObtenerDiv(pos);
     let divNuevo = domCategoriaObjetoADiv(categoria);
 
@@ -312,7 +328,7 @@ function domCategoriaInsertar(categoriaNueva, enOrden=false) {
 }
 
 function domCategoriaLocalizarPosicion(idBuscado) {
-    // TODO ###
+   
     var divsCategorias = divCategoriasDatos.children;
 
     for (var pos = 0; pos < divsCategorias.length; pos++) {
@@ -326,7 +342,7 @@ function domCategoriaLocalizarPosicion(idBuscado) {
 }
 
 function domCategoriaEliminar(id) {
-    // TODO ###
+    
     let pos = domCategoriaLocalizarPosicion(id);
     let div = domCategoriaObtenerDiv(pos);
     div.remove();
@@ -374,6 +390,7 @@ function domPersonaObtenerObjeto(pos) {
 }
 
 function domPersonaEjecutarInsercion(pos, persona) {
+    
     let divReferencia = domPersonaObtenerDiv(pos);
     let divNuevo = domPersonaObjetoADiv(persona);
 

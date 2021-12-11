@@ -66,8 +66,6 @@ function inicializar() {
     divCategoriasDatos = document.getElementById("categoriasDatos"); 
     divPersonasDatos = document.getElementById("personasDatos");
 
-    
-
     inputCategoriaNombre = document.getElementById("categoriaNombre"); 
     inputPersonaNombre = document.getElementById("personaNombre");
 

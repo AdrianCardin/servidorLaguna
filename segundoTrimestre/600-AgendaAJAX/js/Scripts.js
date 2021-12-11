@@ -63,18 +63,31 @@ function debug() {
 // Por ejemplo: disablearCamposPersonaCrear(), enablearCamposPersonaCrear(), obtenerObjetoPersonaDeCamposPersonaCrear()...
 
 function inicializar() {
-    divCategoriasDatos = document.getElementById("categoriasDatos"); // TODO ###
+    divCategoriasDatos = document.getElementById("categoriasDatos"); 
     divPersonasDatos = document.getElementById("personasDatos");
 
-    inputCategoriaNombre = document.getElementById("categoriaNombre"); // TODO ###
+    
+
+    inputCategoriaNombre = document.getElementById("categoriaNombre"); 
     inputPersonaNombre = document.getElementById("personaNombre");
 
     inputPersonaApellidos = document.getElementById("personaApellidos");
     inputPersonaTelefono = document.getElementById("personaTelefono");
     inputPersonaCategoriaId = document.getElementById("personaCategoriaId");
 
-    document.getElementById('btnCategoriaCrear').addEventListener('click', clickCategoriaCrear);
-    document.getElementById('btnPersonaCrear').addEventListener('click', clickPersonaCrear);
+    // _________________ Implementacion _________________
+
+    botonCategoriaCrear=document.getElementById('btnCategoriaCrear');
+    botonPersonaCrear=document.getElementById('btnPersonaCrear');
+
+    existeCategoria = botonCategoriaCrear != null ? true : false;
+    existePersona   = botonPersonaCrear   != null ? true : false;
+
+
+    existeCategoria == true   ?   botonCategoriaCrear.addEventListener('click', clickCategoriaCrear)  :  null;
+    existePersona   == true   ?   botonPersonaCrear.addEventListener('click', clickPersonaCrear)      :  null;
+    
+
 
 
     // En los "Insertar" de a continuación no se fuerza la ordenación, ya que PHP
@@ -176,7 +189,23 @@ function clickPersonaCrear() {
 }
 
 function blurCategoriaModificar(input) {
-// TODO
+    let divCategoria = input.parentElement.parentElement;
+    let categoria = domCategoriaDivAObjeto(divCategoria);
+
+    llamadaAjax("CategoriaActualizar.php", objetoAParametrosParaRequest(categoria),
+        function (texto) {
+            if (texto !== "null") {
+                // Se re-crean los datos por si han modificado/normalizado algún valor en el servidor.
+                categoria = JSON.parse(texto);
+                domCategoriaModificar(categoria);
+            } else {
+                notificarUsuario("Error Ajax al modificar: " + texto);
+            }
+        },
+        function (texto) {
+            notificarUsuario("Error Ajax al modificar: " + texto);
+        }
+    );
 }
 
 // TODO Si escribo false en el input para "quitar" la estrella, no se quita (se queda en true). Pasa algo. Depurar.
@@ -201,7 +230,7 @@ function blurPersonaModificar(input) {
 }
 
 function clickCategoriaEliminar(id) {
-    // TODO ###
+    
     llamadaAjax("CategoriaEliminar.php", "id=" + id,
         function (texto) {
             var operacionOK = JSON.parse(texto);
@@ -269,7 +298,7 @@ function domCategoriaObjetoADiv(categoria) {
 }
 
 function domCategoriaObtenerDiv(pos) {
-    // TODO ###
+   
     return divCategoriasDatos.children[pos];
 }
 
@@ -286,7 +315,7 @@ function domCategoriaObtenerObjeto(pos) {
 }
 
 function domCategoriaEjecutarInsercion(pos, categoria) {
-    // TODO ###
+    
     let divReferencia = domCategoriaObtenerDiv(pos);
     let divNuevo = domCategoriaObjetoADiv(categoria);
 
@@ -307,12 +336,16 @@ function domCategoriaInsertar(categoriaNueva, enOrden=false) {
         }
     }
 
-    // Si llegamos hasta aquí, insertamos al final.
-    domCategoriaEjecutarInsercion(divCategoriasDatos.children.length, categoriaNueva);
+    // Si llegamos hasta aquí, insertamos al final. 
+
+    // ___________ Implementacion ___________
+    // IMPORTANTE !!!!  -->    Hay que tener en cuenta que se comparte el mismo js para dos html distintos por lo que habra situaciones en las que no existe el componente y por ello lo ponemos a null ;
+    divCategoriasDatos == null ? null : domCategoriaEjecutarInsercion(divCategoriasDatos.children.length, categoriaNueva);
+    
 }
 
 function domCategoriaLocalizarPosicion(idBuscado) {
-    // TODO ###
+   
     var divsCategorias = divCategoriasDatos.children;
 
     for (var pos = 0; pos < divsCategorias.length; pos++) {
@@ -326,7 +359,7 @@ function domCategoriaLocalizarPosicion(idBuscado) {
 }
 
 function domCategoriaEliminar(id) {
-    // TODO ###
+    
     let pos = domCategoriaLocalizarPosicion(id);
     let div = domCategoriaObtenerDiv(pos);
     div.remove();
@@ -374,6 +407,7 @@ function domPersonaObtenerObjeto(pos) {
 }
 
 function domPersonaEjecutarInsercion(pos, persona) {
+    
     let divReferencia = domPersonaObtenerDiv(pos);
     let divNuevo = domPersonaObjetoADiv(persona);
 
@@ -399,7 +433,10 @@ function domPersonaInsertar(personaNueva, enOrden = false) {
     }
 
     // Si llegamos hasta aquí, insertamos al final.
-    domPersonaEjecutarInsercion(divPersonasDatos.children.length, personaNueva);
+    // ___________ Implementacion ___________
+    // IMPORTANTE !!!!  -->    Hay que tener en cuenta que se comparte el mismo js para dos html distintos por lo que habra situaciones en las que no existe el componente y por ello lo ponemos a null ;
+    
+    divPersonasDatos == null ? null : domPersonaEjecutarInsercion(divPersonasDatos.children.length, personaNueva);
 }
 
 function domPersonaLocalizarPosicion(idBuscado) {
